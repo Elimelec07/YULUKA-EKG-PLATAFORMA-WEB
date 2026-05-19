@@ -5,9 +5,11 @@
 
 ## 📌 1. Introducción y Justificación
 
-El **electrocardiograma (EKG)** es la herramienta de referencia para la detección y monitorización de enfermedades cardiovasculares; sin embargo, su análisis automatizado depende de forma crítica de la calidad del procesamiento aplicado a la señal. En la práctica, muchas soluciones existentes requieren software especializado y conocimientos técnicos avanzados, lo que limita su accesibilidad en contextos educativos y de formación clínica.
+El **electrocardiograma (EKG)** es la herramienta de referencia para la detección y monitorización de enfermedades cardiovasculares. Sin embargo, su enseñanza tradicional se basa en trazados estáticos e idealizados en papel, lo que crea una brecha significativa con la realidad, donde las señales sufren alteraciones dinámicas por artefactos técnicos e interferencias biológicas.
 
-**Yuluka‑EKG** surge con el propósito de cerrar la brecha entre la investigación biomédica y la práctica clínica‑formativa, ofreciendo una **plataforma web accesible** que integra técnicas avanzadas de procesamiento de señales EKG junto con **visualización interactiva**. La herramienta está concebida como un entorno de **aprendizaje para el personal del área de la salud**, facilitando la comprensión de los efectos del filtrado, la detección de eventos cardíacos y la interpretación básica de resultados.
+**Yuluka‑ECG** surge para cerrar esta brecha formativa. Más que un software de filtrado, es un entorno web de simulación de aprendizaje de estas señales diseñado para el personal de la salud. La plataforma integra señales reales de alta fidelidad, procesamiento digital y tutoría basada en Inteligencia Artificial (IA), permitiendo a los estudiantes enfrentarse a escenarios hospitalarios reales, gestionar artefactos técnicos y tomar decisiones clínicas con retroalimentación inmediata.
+
+**Yuluka‑EKG** surge con el propósito de cerrar la brecha entre la investigación biomédica y la práctica 
 
 ---
 
