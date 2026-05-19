@@ -5,124 +5,135 @@
 
 ## 1. Introducción
 
-Yuluka-EKG es una plataforma web interactiva diseñada para la formación clínica en cuidado crítico. El sistema permite la visualización simultánea de electrocardiogramas (EKG) de 12 derivaciones, la manipulación de filtros digitales para la remoción de artefactos técnicos, y la evaluación interactiva mediante quices dinámicos respaldados por un tutor cognitivo basado en Inteligencia Artificial.
+Yuluka-EKG es una plataforma web interactiva diseñada para la formación de estudiantes del área de la salud. El sistema permite la visualización simultánea de electrocardiogramas (EKG) de 12 derivaciones, la manipulación de filtros digitales para la remoción de artefactos técnicos, y la evaluación interactiva mediante quices dinámicos respaldados por un tutor cognitivo basado en Inteligencia Artificial.
 
 ### Objetivos Técnicos
-- **Procesamiento en Backend: Filtrar bioseñales reales de la base de datos PTB-XL reduciendo el ruido de la red eléctrica colombiana (60 Hz) y variaciones de línea base sin introducir distorsiones de fase.**
-- **Persistencia Local Eficiente: Registrar de forma segura sesiones de usuarios y métricas de rendimiento clínico sin requerir infraestructura de servidores pesada.**
-- **Inteligencia Artificial de Bajo Costo: Implementar un agente conversacional contextualizado capaz de guiar de forma pedagógica a los usuarios sin comprometer la cuota de tokens disponibles.**
+
+- **Procesamiento en Backend:** Filtrar bioseñales reales de la base de datos PTB-XL reduciendo el ruido de la red eléctrica colombiana (60 Hz) y variaciones de línea base sin introducir distorsiones de fase.
+
+- **Persistencia Local Eficiente:** Registrar de forma segura sesiones de usuarios y métricas de rendimiento clínico utilizando bases de datos relacionales ligeras.
+
+- **Inteligencia Artificial Contextualizada:** Implementar un agente conversacional capaz de guiar de forma pedagógica a los usuarios interpretando los datos en pantalla.*
 
 ---
 
-## 2. Alcance del Diseño
+## 2. Arquitectura del Sistema
 
-Arquitectura del Sistema
+El software sigue un patrón arquitectónico Cliente-Servidor, optimizado para el renderizado de alta fidelidad y despliegue rápido. La separación de responsabilidades asegura la escalabilidad del proyecto.
 
-El software sigue un patrón arquitectónico Cliente-Servidor de Capa Ligera, optimizado para ejecuciones locales con capacidad de escalamiento inmediato a entornos de nube públicos (PaaS).
-- **Capa de Presentación (Frontend): Interfaz SPA (Single Page Application) construida sobre estándares web (HTML5, CSS3, JS ES6). Utiliza el elemento Canvas mediante Chart.js para renderizar flujos vectoriales de 12 canales simulando papel milimetrado clínico a 25mm/s y 1mV/cm.**
-- **Capa de Lógica de Negocio (Backend): Servidor asíncrono basado en Flask (Python). Se encarga de la orquestación de la base de datos, el consumo de la API de IA externa y la ejecución de los algoritmos de procesamiento digital de señales (DSP).**
-- **Servicios Externos: Conexión HTTPS hacia la API de Google AI Studio para el procesamiento del lenguaje natural mediante el modelo Gemini 1.5 Flash.**
+### Diagrama de capas 
+```text
+[ Capa de Presentación (Frontend) ]
+├── UI Dashboard: HTML5, CSS3, JS ES6
+└──Renderizado ECG: Chart.js (Animación circular vía requestAnimationFrame)
+
+
+[ Capa de Lógica de Negocio (Backend API) ]
+├── Enrutamiento & Control: Python (Flask)
+├── Pipeline DSP: SciPy, NumPy (Filtrado Bidireccional)
+└── Gestión de IA: Integración SDK Google Gemini API
+
+[ Capa de Datos (Persistencia) ]
+├── Registros Clínicos: JSON / WFDB (PhysioNet PTB-XL)
+└── Datos de Usuario & Métricas: SQLite (Vía Flask-SQLAlchemy)
+```
  
 ---
 
-### 3. Arquitectura General del Sistema
+### 3. Modelo de Datos y Persistencia
 
-Se implementa una arquitectura de almacenamiento relacional basada en SQLite gestionada a través del ORM Flask-SQLAlchemy. Este enfoque garantiza portabilidad absoluta al guardar la base de datos en un único archivo físico (.db) en el directorio raíz.
+Se implementa una arquitectura relacional basada en SQLite gestionada a través del ORM Flask-SQLAlchemy. Este enfoque garantiza la portabilidad del sistema al alojar la base de datos en un único archivo físico (.db), sin requerir configuración de servidores externos.
+Diccionario de Datos Clave
 
-- **Capa de Presentación (Frontend Web)**
-- **Capa de Servicios (Backend API REST)**
-- **Capa de Procesamiento de Señales**
-- **Capa de Datos**
-Esta organización permite la separación de responsabilidades, mejora la mantenibilidad del sistema y facilita la escalabilidad.
-
-### Diccionario de Datos Clave
 Tabla: Usuarios
-- **id (Integer, Primary Key): Identificador único autoincremental.**
-- **nombre (String): Nombre o identificador del estudiante.**
-- **correo (String, Unique): Correo electrónico para el inicio de sesión.**
-- **password_hash (String): Clave encriptada utilizando algoritmos de derivación de funciones criptográficas (vía Werkzeug).**
+
+- `id` (Integer, Primary Key): Identificador único autoincremental.
+- `nombre` (String): Nombre o identificador del estudiante.
+- `correo` (String, Unique): Correo electrónico para el inicio de sesión.
+- `password_hash` (String): Clave encriptada utilizando algoritmos de derivación (vía `Werkzeug`).
 
 Tabla: ResultadosQuiz
-- **id (Integer, Primary Key): Identificador único del intento.**
-- **user_id (Integer, Foreign Key): Referencia apuntando a Usuarios.id.**
-- **categoria_patologia (String): Clasificación del caso evaluado (NORM, MI [Infarto], ARRH [Arritmia], CD [Bloqueos de Conducción]).**
-- **es_correcto (Boolean): Almacena si el estudiante acertó la conducta y el diagnóstico.**
-- **fecha (DateTime): Registro temporal automático del intento para cálculos de analítica evolutiva.**
 
+- `id` (Integer, Primary Key): Identificador único del intento.
+- `user_id` (Integer, Foreign Key): Referencia apuntando a `Usuarios.id`.
+- `categoria_patologia` (String): Clasificación del caso evaluado (NORM, MI [Infarto], ARRH [Arritmia], CD [Bloqueos de Conducción]).
+- `es_correcto (Boolean)`: Registro del acierto en la conducta y diagnóstico.
+- `fecha (DateTime)`: Registro temporal para cálculos de analítica evolutiva de aprendizaje.
 ---
 
 ## 4. Diseño de modulo criticos
 
-### Módulo 1: Procesamiento Digital de Señales (DSP)
-Módulo encargado de la remoción de ruido mediante la librería SciPy.signal. Para evitar el desfase temporal de las ondas P-QRS-T (lo cual alteraría los diagnósticos clínicos de intervalos), todas las operaciones se ejecutan empleando filtrado bidireccional de fase cero (filtfilt).
-- **Filtro Notch (Rechazo de Banda): Configurado exactamente a una frecuencia central de $f_0 = 60.0\text{ Hz}$ con un factor de calidad $Q = 30.0$ enfocado en neutralizar la inducción de las redes eléctricas locales.**
-- **Filtro Clínico (Pasa-Banda): Filtro Butterworth de 3er orden con frecuencias de corte entre $0.5\text{ Hz}$ y $40\text{ Hz}$. Elimina el baseline wander (causado por la respiración de baja frecuencia) y los potenciales de acción musculares (alta frecuencia).**
-- **Filtro Adaptativo de Suavizado (Savitzky-Golay): Configurado con una ventana de longitud fija y un polinomio de 3er orden para suavizar las transiciones de la señal respetando la amplitud real de los picos R.**
-### Módulo 2: Motor de Simulación y Quiz (quiz.html)
-Este componente desacopla la evaluación clínica del monitor principal para evitar sobrecargas visuales.
-- **Consume un set de datos JSON preconfigurado con 15 registros de control procedentes de la base de datos PTB-XL.**
-- **Almacena las opciones de respuesta y las asocia a una matriz de Retroalimentación Fisiopatológica. Si el estudiante selecciona una conducta errónea, la UI renderiza un cuadro de diálogo dinámico que contrasta la respuesta del estudiante con medidas métricas específicas (longitud del intervalo PR, deflexiones del segmento ST, presencia de ondas fibrilatorias).**
-### Módulo 3: Asistente Cognitivo (Monitor-Bot)
-Integración mediante el SDK oficial de Google (google-generativeai) utilizando el modelo Gemini 1.5 Flash.
-- **Estrategia de Prompt Engineering (Inyección de Contexto Dinámico): Cada mensaje enviado por el usuario es interceptado en el backend y envuelto dentro de una instrucción de sistema invariable:**
-Plaintext
-[SYSTEM INSTRUCTION]: Eres un tutor clínico especializado de soporte para Yuluka-EKG. 
-El estudiante está analizando actualmente el registro de PTB-XL con ID: {id_actual}.
-El diagnóstico clínico real es: {diagnostico_paciente}.
-REGLA STRICTA: No entregues el diagnóstico de forma directa. Si el estudiante tiene dudas, 
-guíalo analizando la morfología de la señal en pantalla (ej. intervalos PR, amplitud de la onda T).
-- **Seguridad de Consumo: Para mitigar el agotamiento de cuotas gratuitas, el servidor valida los tokens de sesión activos y puede restringir el número máximo de consultas permitidas por usuario en las tablas relacionales.**
+### Módulo 1: Diseño de Módulos Críticos
 
+Módulo encargado de la remoción de ruido mediante la librería SciPy. Para evitar el desfase temporal de las ondas P-QRS-T (crítico para diagnósticos), las operaciones se ejecutan empleando filtrado bidireccional de fase cero (`filtfilt`).
+
+- Filtro Notch (Rechazo de Banda): Configurado a una frecuencia central de $f_0 = 60.0\text{ Hz}$ para neutralizar la inducción de la red eléctrica.
+- Filtro Clínico (Pasa-Banda): Filtro Butterworth de 3er orden con frecuencias de corte de $0.5\text{ Hz}$ a $40\text{ Hz}$. Elimina el baseline wander respiratorio y potenciales musculares.
+
+### Módulo 2: Motor de Renderizado Dinámico (Chart.js)
+
+Este componente gestiona la representación gráfica simultánea de las 12 derivaciones del electrocardiograma en el dashboard principal y en el apartado de quices de la plataforma.
+- **Renderizado Estático de Alta Fidelidad:** El sistema carga ventanas de tiempo fijas (3 segundos de registro). Este diseño obedece a un enfoque pedagógico, permitiendo al estudiante analizar detalladamente y sin presión de tiempo la morfología de la señal (complejos QRS, segmento ST) y el comportamiento antes/después de aplicar los filtros.
+- **Optimización de Interfaz (Canvas):** Para asegurar un rendimiento óptimo al dibujar múltiples instancias gráficas de manera simultánea en dispositivos de bajos recursos, se desactivan las transiciones y animaciones nativas de Chart.js (`animation: false`), priorizando la precisión técnica de los datos clínicos sobre los efectos visuales.
+
+### Módulo 3: Motor de Simulación y Evaluación (`quiz.html`)
+
+Desacopla la evaluación clínica del monitor principal.
+- Consume un set de datos JSON preconfigurado con registros de la base de datos PTB-XL.
+- Incorpora una matriz de Retroalimentación Fisiopatológica: si el estudiante falla, el sistema contrasta la respuesta con medidas métricas específicas (longitud del intervalo PR, segmento ST) para justificar el error.
+
+### Módulo 4: Asistente Cognitivo (Monitor-Bot) e IA
+Integración mediante el SDK de Google (google-generativeai) con el modelo Gemini 2.5 Flash.
+- Inyección de Contexto Dinámico: El backend intercepta el mensaje y adjunta parámetros clínicos invisibles para el usuario:
+  `[SYSTEM]: El estudiante analiza el registro ID {id_actual}. Diagnóstico: {diagnostico}. No entregues la respuesta directa, guía mediante morfología.`
+
+### Módulo 5: Soporte e Inducción de Usuario (`Ayuda.html`)
+
+Este componente proporciona un entorno de asistencia integrado en el frontend para orientar al personal de salud en el usonde la plataforma, reduciendo la curva de aprendizaje inicial.
+- **Onboarding e Interactividad Local:** Implementa una guía paso a paso del uso de la plataforma. Explica disposición del dashboard: la lectura de las 12 derivaciones, el impacto de activar/desactivar los filtros DSP la dinámica de envío de respuestas en el quiz.
 
 ---
 
-## 5. strategia de Despliegue y Configuración del Entorno (Fase de Pruebas)
-Para ejecutar pruebas remotas con usuarios reales (compañeros de la facultad y docentes de control) sin incurrir en costos de alojamiento en la nube, el entorno se despliega utilizando una arquitectura de Túnel Seguro Inverso (Tunneling).
----
+## 6. Tecnologías y Herramientas Seleccionadas
 
-## 6. Tecnologías y Herramientas
+## 🛠️ Stack Tecnológico
 
-| Componente | Tecnología |
-|---------|-----------|
-| Lenguaje principal | Python |
-| Backend | Flask |
-| Procesamiento de señales | NumPy, SciPy |
-| Bioseñales | BioSPPy, NeuroKit2 |
-| Frontend | HTML, CSS, JavaScript |
-| Visualización | Plotly.js |
-| Dataset | PTB-XL – PhysioNet |
+| Componente | Tecnología Seleccionada | Justificación Técnica |
+|---|---|---|
+| ⚙️ **Backend & Enrutamiento** | `Python` + `Flask` | Entorno ligero y flexible, ideal para integración de librerías científicas y despliegue ágil. |
+| 📊 **Procesamiento DSP** | `NumPy` + `SciPy` | Estándar de la industria para filtrado digital, análisis e interpolación matemática. |
+| 🗄️ **Persistencia Relacional** | `SQLite` + `SQLAlchemy` | Base de datos serverless adecuada para persistencia local y gestión de sesiones. |
+| 🎨 **Frontend & UI** | `HTML5` + `CSS3` + `JavaScript (ES6)` | Desarrollo responsivo, moderno y compatible con navegadores web actuales. |
+| 📈 **Visualización de Señales** | `Chart.js` | Renderizado eficiente en Canvas para series temporales multicanal. |
+| 🌐 **Visualización 3D** | `Three.js (WebGL)` | Carga optimizada de modelos `GLTF/GLB` de bajo peso poligonal. |
+| 🧠 **Fuente de Datos** | `PTB-XL (PhysioNet)` | Base de datos clínica validada y procesada en formato JSON. |
 
 ---
 
 ## 7. Consideraciones Técnicas
-
-- **Rendimiento:** Optimizado para uso educativO.
-- **Escalabilidad:** Posibilidad de delegar tareas complejas a la nube.
-- **Usabilidad:** Interfaz orientada al aprendizaje progresivo.
-- **Seguridad:** No se manejan datos clínicos reales ni sensibles.
+- Rendimiento: El renderizado asíncrono y la delegación de procesamiento de IA al modelo Gemini 2.5 previenen bloqueos en el hilo principal del navegador.
+- Escalabilidad: La separación entre el backend de Flask y las vistas permite migrar a arquitecturas de microservicios (AWS, Google Cloud) en futuras etapas.
+- Usabilidad: Diseño "Mobile-First" asegurando legibilidad de las gráficas médicas en tablets y celulares.
 
 ---
 
 ## 8. Limitaciones del Diseño
 
-- No sustituye software clínico certificado.
-- No debe utilizarse para diagnóstico médico.
-- Optimizado para entornos educativos, no clínicos.
+- La plataforma está concebida para la simulación educativa, por lo que no cumple con el nivel de aseguramiento de software de clase médica (IEC 62304).
+- La calidad de la interpretación depende estrictamente de la integridad del JSON extraído de la base de datos PTB-XL original.
 
 ---
 
 ## 9. Advertencia de Uso
 
-> ⚠️ **Advertencia:**  
-> Yuluka‑EKG es una plataforma con fines **educativos y de investigación**.  
-> Los resultados generados **no deben utilizarse para diagnóstico ni decisiones clínicas reales**.  
-> Los autores y colaboradores no se responsabilizan por el uso indebido del sistema.
+>⚠️ Advertencia Legal:
+>Yuluka‑EKG es una plataforma con fines estrictamente educativos. Los algoritmos de filtrado, las visualizaciones 3D y >las sugerencias del asistente de Inteligencia Artificial no deben utilizarse para el diagnóstico médico de pacientes >reales ni para la toma de decisiones clínicas. Los desarrolladores no asumen responsabilidad por el uso indebido del >sistema fuera del ámbito académico.
 
 ---
 
 ## 10. Conclusión del Diseño Técnico
 
-El diseño técnico de Yuluka‑EKG define una plataforma modular, accesible y técnicamente sólida que integra procesamiento de señales EKG y visualización interactiva bajo una arquitectura web moderna. Su enfoque educativo la posiciona como una herramienta eficaz para el aprendizaje del análisis de bioseñales en el área de la salud y la ingeniería biomédica.
+El diseño de Yuluka‑EKG establece una plataforma web robusta. Al sustituir la complejidad técnica de librerías clínicas pesadas por herramientas web dinámicas y apoyarse en datos estandarizados, se logra un balance óptimo entre rendimiento ingenieril y valor pedagógico para las ciencias de la salud.
 
 ---
 
