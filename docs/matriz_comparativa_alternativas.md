@@ -37,13 +37,17 @@ La evaluación comparativa se realizó con base en los siguientes criterios:
 
 ### Matriz Comparativa de Soluciones de Aprendizaje en EKG
 
-| Criterio de Evaluación | Métodos Tradicionales (Libros y Guías Estáticas) | Simuladores Comerciales de Cuidado Crítico | **Yuluka‑EKG (Este Proyecto)** |
-| :--- | :--- | :--- | :--- |
-| **Realismo de las Señales** | **Bajo:** Gráficos impresos idealizados y limpios que omiten la variabilidad biológica real. | **Medio:** Señales sintéticas o parametrizadas digitalmente que suelen verse demasiado perfectas. | **Alto:** Datos clínicos reales de pacientes procedentes de la base de datos estandarizada **PTB-XL (PhysioNet)**. |
-| **Tutoría y Acompañamiento** | **Inexistente:** El estudiante depende de su propia interpretación o de la disponibilidad de un docente. | **Humano-Dependiente:** Requiere que un instructor médico configure los escenarios y evalúe al estudiante en vivo. | **Automatizado (Monitor-Bot):** Asistente cognitivo 24/7 impulsado por la API de **Gemini 2.5 Flash** que analiza el contexto y guía al alumno con pistas visuales. |
-| **Evaluación de Conductas** | **Teórica:** Preguntas estándar de opción múltiple enfocadas en memorizar nombres de patologías. | **Práctica Rígida:** Escenarios fijos basados en maniquíes costosos que requieren laboratorios especializados. | **Simulación Clínica Web:** Quices dinámicos basados en casos aleatorios reales que exigen decidir conductas según protocolos de enfermería UCC. |
-| **Análisis de Progreso (Metacognición)** | **No aplica:** No hay registro del desempeño histórico del estudiante. | **Básico:** Reportes de aprobación/reprobación individuales sin análisis estadístico profundo. | **Analítico Personalizado:** Base de datos relacional (**SQLite**) que mapea debilidades específicas por patología y genera consejos de estudio. |
-| **Costo y Accesibilidad** | **Bajo costo / Alta barrera:** Libros costosos y material estático que se desactualiza rápido. | **Costo Extremadamente Alto:** Requiere licencias corporativas, hardware médico y estaciones de simulación físicas. | **Cero Costo / Web:** Plataforma ligera y responsiva ejecutable desde cualquier dispositivo mediante un navegador usando **Ngrok** o **Render**. |
+## 📊 Comparativa Tecnológica y Educativa
+
+| 📌 Criterio de Evaluación | 📚 Métodos Tradicionales | 🏥 Simuladores Comerciales | 🚀 **Yuluka-EKG (Este Proyecto)** |
+|---|---|---|---|
+| 🫀 **Realismo de las Señales** | ⭐⭐☆☆☆ **(2/5)**  <br> Gráficos impresos idealizados y poco representativos de la variabilidad clínica real. | ⭐⭐⭐☆☆ **(3/5)**  <br> Señales sintéticas parametrizadas digitalmente con baja imperfección fisiológica. | ⭐⭐⭐⭐⭐ **(5/5)**  <br> Uso de datos clínicos reales provenientes de **PTB-XL (PhysioNet)**, proporcionando escenarios auténticos de interpretación ECG. |
+| 🤖 **Tutoría y Acompañamiento** | ⭐☆☆☆☆ **(1/5)**  <br> El aprendizaje depende totalmente del estudiante o del acompañamiento docente presencial. | ⭐⭐⭐☆☆ **(3/5)**  <br> Necesita supervisión continua de instructores médicos para configurar y evaluar escenarios. | ⭐⭐⭐⭐⭐ **(5/5)**  <br> Integración de un **Monitor-Bot** basado en **Gemini 2.5 Flash**, disponible 24/7 con orientación contextual y retroalimentación visual inteligente. |
+| 🩺 **Evaluación de Conductas Clínicas** | ⭐⭐☆☆☆ **(2/5)**  <br> Evaluaciones teóricas centradas en memorización y reconocimiento básico de patologías. | ⭐⭐⭐⭐☆ **(4/5)**  <br> Simulaciones prácticas avanzadas, pero limitadas a laboratorios físicos y escenarios rígidos. | ⭐⭐⭐⭐⭐ **(5/5)**  <br> Simulación clínica web interactiva con casos aleatorios reales y toma de decisiones basadas en protocolos UCC. |
+| 📈 **Análisis de Progreso (Metacognición)** | ⭐☆☆☆☆ **(1/5)**  <br> No existe seguimiento histórico ni análisis personalizado del desempeño académico. | ⭐⭐☆☆☆ **(2/5)**  <br> Reportes básicos de aprobación/reprobación sin inteligencia analítica profunda. | ⭐⭐⭐⭐⭐ **(5/5)**  <br> Sistema analítico con **SQLite** capaz de detectar debilidades específicas y generar recomendaciones adaptativas de estudio. |
+| 🌐 **Costo y Accesibilidad** | ⭐⭐⭐☆☆ **(3/5)**  <br> Material relativamente accesible, aunque costoso y rápidamente desactualizado. | ⭐☆☆☆☆ **(1/5)**  <br> Alto costo de licencias, infraestructura médica y estaciones físicas de simulación. | ⭐⭐⭐⭐⭐ **(5/5)**  <br> Plataforma web ligera, responsiva y de bajo costo operativo, accesible desde cualquier navegador mediante **Ngrok** o **Render**. |
+| ⚡ **Facilidad de Implementación / Tiempo de Desarrollo** | ⭐⭐⭐⭐☆ **(4/5)**  <br> Material educativo simple de producir y distribuir, aunque limitado en interactividad y actualización. | ⭐☆☆☆☆ **(1/5)**  <br> Desarrollo altamente complejo que requiere hardware especializado, integración médica y equipos multidisciplinarios. | ⭐⭐⭐⭐⭐ **(5/5)**  <br> Arquitectura web basada en `Flask`, `SQLite` y tecnologías frontend ligeras, permitiendo desarrollo rápido, despliegue ágil y mantenimiento simplificado. |
+
 
 ---
 
@@ -74,4 +78,4 @@ A partir de la matriz comparativa presentada, se selecciona Yuluka‑EKG como la
 
 ## 🚀 7. Conclusión
 
-La matriz comparativa de alternativas demuestra que Yuluka‑EKG representa la solución más equilibrada e innovadora frente a las opciones evaluadas en el mercado educativo y comercial. Al fusionar de manera armónica el preprocesamiento de datos reales, la Inteligencia Artificial y las ayudadas pedagogicas, el proyecto se consolida como una herramienta capaz de cerrar la brecha formativa y preparar eficientemente a los futuros profesionales de la salud.
+El análisis demuestra que Yuluka-EKG es la solución más eficiente frente a las alternativas actuales. Al integrar señales clínicas reales, procesamiento digital e Inteligencia Artificial, la plataforma cierra la brecha teórica y prepara al personal de salud para los retos de la práctica clínica real.
