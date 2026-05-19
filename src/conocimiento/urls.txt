@@ -1,0 +1,21 @@
+# FUENTES WEB PARA MONITOR-BOT
+# ==============================
+# Agrega una URL por línea.
+# Las líneas que empiezan con # son comentarios y se ignoran.
+# El servidor las descarga automáticamente al arrancar.
+# Si cambias este archivo, reinicia el servidor (python app.py).
+#
+# Ejemplo:
+# https://www.ejemplo.com/guia-ecg
+#
+# PEGA TUS URLs AQUÍ:
+https://en.ecgpedia.org/wiki/Main_Page
+https://en.ecgpedia.org/wiki/Basics
+https://en.ecgpedia.org/wiki/The_Normal_ECG
+https://en.ecgpedia.org/wiki/Ischemia_and_Infarction
+https://en.ecgpedia.org/wiki/Arrhythmias
+https://en.ecgpedia.org/wiki/Conduction_Delays
+https://en.ecgpedia.org/wiki/Hypertrophy
+https://en.ecgpedia.org/wiki/Step_by_Step_ECG_Evaluation
+https://en.ecgpedia.org/wiki/Electrolytes_and_Intoxications
+https://en.ecgpedia.org/wiki/Pacemaker

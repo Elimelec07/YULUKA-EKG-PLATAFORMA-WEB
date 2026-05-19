@@ -1,8 +1,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: #eef2f7;
-    color: #1a202c;
+    background: #0d1117;
+    color: #e6edf3;
 }
 
 /* ── Header ── */
@@ -56,11 +56,11 @@ body {
     align-items: center;
     gap: 16px;
     padding: 80px 0;
-    color: #64748b;
+    color: #8b949e;
 }
 .spinner {
     width: 40px; height: 40px;
-    border: 4px solid #e2e8f0;
+    border: 4px solid #30363d;
     border-top-color: #2563eb;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
@@ -100,26 +100,26 @@ body {
 
 /* ── Cards ── */
 .perfil-card {
-    background: white;
+    background: #161b22;
     border-radius: 16px;
     padding: 22px 24px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
 }
 .card-titulo {
     font-size: 0.88rem;
     font-weight: 800;
-    color: #1e3a5f;
+    color: #90b4ff;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-bottom: 18px;
     padding-bottom: 10px;
-    border-bottom: 2px solid #e2e8f0;
+    border-bottom: 2px solid #30363d;
 }
 
 /* Radar */
 .card-radar { display: flex; flex-direction: column; align-items: center; }
 .radar-wrap { width: 100%; max-width: 280px; margin: 0 auto 12px; }
-.radar-hint { font-size: 0.75rem; color: #94a3b8; text-align: center; }
+.radar-hint { font-size: 0.75rem; color: #8b949e; text-align: center; }
 
 /* Barras de categorías */
 .cat-fila {
@@ -129,10 +129,10 @@ body {
     gap: 10px;
     margin-bottom: 14px;
 }
-.cat-nombre  { font-size: 0.84rem; font-weight: 700; color: #374151; }
+.cat-nombre  { font-size: 0.84rem; font-weight: 700; color: #e6edf3; }
 .cat-barra-wrap {
     height: 10px;
-    background: #e2e8f0;
+    background: #30363d;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -144,7 +144,7 @@ body {
 }
 .cat-stats   { display: flex; flex-direction: column; align-items: flex-end; }
 .pct-label   { font-size: 0.85rem; font-weight: 800; }
-.count-label { font-size: 0.72rem; color: #94a3b8; }
+.count-label { font-size: 0.72rem; color: #8b949e; }
 
 /* Insights */
 .card-insights { grid-column: 1 / -1; }
@@ -152,13 +152,13 @@ body {
     display: flex;
     gap: 10px;
     padding: 11px 14px;
-    background: #f0f9ff;
+    background: rgba(41,121,255,0.12);
     border-left: 4px solid #2563eb;
     border-radius: 0 10px 10px 0;
     font-size: 0.845rem;
     line-height: 1.5;
     margin-bottom: 10px;
-    color: #1e3a5f;
+    color: #90b4ff;
 }
 .insight-dot { flex-shrink: 0; font-size: 1rem; }
 
@@ -174,8 +174,8 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-    border: 1.5px solid #bae6fd;
+    background: rgba(41,121,255,0.1);
+    border: 1.5px solid rgba(41,121,255,0.3);
     border-radius: 14px;
     padding: 16px 20px;
     min-width: 110px;
@@ -187,9 +187,9 @@ body {
     to   { opacity: 1; transform: scale(1); }
 }
 .badge-icono  { font-size: 1.8rem; }
-.badge-titulo { font-size: 0.78rem; font-weight: 800; color: #1e3a5f; }
-.badge-desc   { font-size: 0.68rem; color: #64748b; }
-.badges-empty { color: #94a3b8; font-size: 0.85rem; text-align: center; padding: 20px 0; }
+.badge-titulo { font-size: 0.78rem; font-weight: 800; color: #90b4ff; }
+.badge-desc   { font-size: 0.68rem; color: #8b949e; }
+.badges-empty { color: #8b949e; font-size: 0.85rem; text-align: center; padding: 20px 0; }
 
 /* ── Zona de reset ── */
 .zona-reset {
@@ -197,14 +197,14 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    background: #fff1f2;
-    border: 1.5px dashed #fca5a5;
+    background: rgba(220,38,38,0.08);
+    border: 1.5px dashed rgba(220,38,38,0.4);
     border-radius: 14px;
     padding: 18px 24px;
     flex-wrap: wrap;
 }
-.zona-reset-texto strong { display: block; font-size: 0.9rem; color: #991b1b; margin-bottom: 3px; }
-.zona-reset-texto small  { font-size: 0.78rem; color: #b91c1c; }
+.zona-reset-texto strong { display: block; font-size: 0.9rem; color: #fc8181; margin-bottom: 3px; }
+.zona-reset-texto small  { font-size: 0.78rem; color: #fca5a5; }
 .btn-reset {
     background: #dc2626;
     color: white;
@@ -228,10 +228,10 @@ body {
     gap: 14px;
     padding: 80px 0;
     text-align: center;
-    color: #64748b;
+    color: #8b949e;
 }
 .vacio-icono { font-size: 4rem; }
-.estado-vacio h2 { font-size: 1.4rem; color: #374151; }
+.estado-vacio h2 { font-size: 1.4rem; color: #e6edf3; }
 .btn-ir-quiz {
     margin-top: 8px;
     background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
@@ -258,21 +258,21 @@ body {
     padding: 20px;
 }
 .modal-reset-box {
-    background: white;
+    background: #161b22;
     border-radius: 18px;
     padding: 36px 32px;
     max-width: 400px;
     width: 100%;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 .modal-reset-icono { font-size: 2.5rem; margin-bottom: 12px; }
-.modal-reset-box h3 { font-size: 1.1rem; color: #1e3a5f; margin-bottom: 10px; }
-.modal-reset-box p  { font-size: 0.85rem; color: #4a5568; line-height: 1.55; margin-bottom: 24px; }
+.modal-reset-box h3 { font-size: 1.1rem; color: #90b4ff; margin-bottom: 10px; }
+.modal-reset-box p  { font-size: 0.85rem; color: #8b949e; line-height: 1.55; margin-bottom: 24px; }
 .modal-reset-botones { display: flex; gap: 12px; justify-content: center; }
 .btn-cancelar {
-    background: #e2e8f0;
-    color: #374151;
+    background: #30363d;
+    color: #e6edf3;
     border: none;
     border-radius: 9px;
     padding: 10px 24px;

@@ -21,6 +21,12 @@ try:
 except ImportError:
     _GEMINI_OK = False
 
+try:
+    import pdfplumber
+    _PDF_OK = True
+except ImportError:
+    _PDF_OK = False
+
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 if _GEMINI_OK and GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
@@ -292,6 +298,164 @@ def _aplicar_filtro(senal_np, fs, modo):
 
 
 # ================================================================
+#  MÓDULO DE INTERPRETACIÓN AUTOMÁTICA DE ECG
+#  Detección de picos R con SciPy · Análisis de ritmo y FC
+# ================================================================
+
+def _ecg_error(msg):
+    """Estructura de retorno cuando el análisis no puede completarse."""
+    return {
+        'frecuencia_cardiaca':      None,
+        'ritmo':                    'Indeterminado',
+        'ritmo_regular':            None,
+        'intervalo_rr_promedio_ms': None,
+        'variabilidad_rr_ms':       None,
+        'num_latidos':              0,
+        'interpretacion':           msg,
+        'categoria':                'error',
+        'confianza':                'baja',
+    }
+
+
+def interpretar_ecg(signal_data, sampling_rate=500):
+    """
+    Interpreta automáticamente una señal ECG de una sola derivación.
+
+    Parámetros
+    ----------
+    signal_data    : list | np.ndarray  — datos en mV (derivación DII o V5)
+    sampling_rate  : int                — Hz (default 500)
+
+    Retorna
+    -------
+    dict con claves: frecuencia_cardiaca, ritmo, ritmo_regular,
+                     intervalo_rr_promedio_ms, variabilidad_rr_ms,
+                     num_latidos, interpretacion, categoria, confianza
+    """
+    senal = np.asarray(signal_data, dtype=float)
+    n     = len(senal)
+
+    # ── Señal mínima (1 segundo) ─────────────────────────────────
+    if n < sampling_rate:
+        return _ecg_error('Señal demasiado corta (< 1 s) para el análisis.')
+
+    # ── Calidad de señal ─────────────────────────────────────────
+    amplitud = float(np.max(senal) - np.min(senal))
+    if amplitud < 0.05:
+        return _ecg_error('Señal plana — posible electrodo desconectado o señal de 0 mV.')
+
+    # ── Normalización z-score ─────────────────────────────────────
+    senal_z = (senal - np.mean(senal)) / (np.std(senal) + 1e-9)
+
+    # Asegurar que los picos R sean positivos (aVR los tiene invertidos)
+    if abs(senal_z.min()) > abs(senal_z.max()):
+        senal_z = -senal_z
+
+    # ── Detección de picos R con find_peaks ──────────────────────
+    # distance: FC máx ~240 lpm → mínimo 0.25 s entre picos
+    # prominence: al menos 0.35 σ sobre el entorno local
+    # height: descartar picos negativos residuales
+    min_distancia = max(30, int(sampling_rate * 0.25))
+    peaks, props  = sp_signal.find_peaks(
+        senal_z,
+        distance   = min_distancia,
+        prominence = 0.35,
+        height     = 0.10,
+    )
+
+    n_peaks = len(peaks)
+    if n_peaks < 2:
+        return _ecg_error(
+            f'Solo {n_peaks} pico(s) R detectado(s). '
+            'La señal puede ser ruidosa o la derivación elegida no muestra complejos QRS claros.'
+        )
+
+    # ── Intervalos R-R (ms) ───────────────────────────────────────
+    rr_samples = np.diff(peaks).astype(float)
+
+    # Filtrar outliers con rango intercuartílico (x2 IQR)
+    q1, q3 = np.percentile(rr_samples, [25, 75])
+    iqr    = q3 - q1
+    mascara = (rr_samples >= q1 - 2*iqr) & (rr_samples <= q3 + 2*iqr)
+    rr_clean = rr_samples[mascara] if mascara.sum() >= 1 else rr_samples
+
+    rr_ms_mean = float(np.mean(rr_clean)) / sampling_rate * 1000
+    rr_ms_std  = float(np.std(rr_clean))  / sampling_rate * 1000
+
+    # ── Frecuencia cardíaca ──────────────────────────────────────
+    fc = round(60_000 / rr_ms_mean, 1)
+
+    # ── Regularidad ──────────────────────────────────────────────
+    # SDNN > 50 ms  O  coef. de variación > 12 %  → ritmo irregular
+    cv        = rr_ms_std / (rr_ms_mean + 1e-9)
+    irregular = (rr_ms_std > 50.0) or (cv > 0.12)
+    ritmo_str = 'Regular' if not irregular else 'Irregular'
+
+    # ── Interpretación clínica basada en reglas ──────────────────
+    sdnn_txt = f'SDNN {round(rr_ms_std, 1)} ms'
+
+    if fc < 40:
+        categoria = 'critico'
+        interp    = (f'Bradicardia severa ({fc} lpm). Urgencia: descartar bloqueo AV completo, '
+                     'paro sinusal o efecto de fármacos cronotrópicos negativos.')
+    elif fc < 60:
+        categoria = 'alerta'
+        if irregular:
+            interp = (f'Bradicardia irregular ({fc} lpm, {sdnn_txt}). '
+                      'Considerar disfunción sinusal (Sick Sinus Syndrome) o bloqueo AV de 2°/3° grado.')
+        else:
+            interp = (f'Bradicardia sinusal ({fc} lpm, {sdnn_txt}). '
+                      'Puede ser fisiológica en atletas o secundaria a fármacos (betabloqueantes, digoxina).')
+    elif fc <= 100:
+        if irregular:
+            categoria = 'alerta'
+            interp    = (f'Ritmo irregular a {fc} lpm ({sdnn_txt}). '
+                         'Alta probabilidad de Fibrilación Auricular o extrasístoles frecuentes. '
+                         'Evaluar onda P y patrón R-R en el trazado.')
+        else:
+            categoria = 'normal'
+            interp    = (f'Ritmo sinusal normal ({fc} lpm, {sdnn_txt}). '
+                         'Frecuencia y regularidad dentro del rango fisiológico estándar.')
+    elif fc <= 150:
+        if irregular:
+            categoria = 'critico'
+            interp    = (f'Taquicardia irregular ({fc} lpm, {sdnn_txt}). '
+                         'Alta sospecha de Fibrilación Auricular con Respuesta Ventricular Rápida (FA-RVR). '
+                         'Evaluar anticoagulación y control de frecuencia.')
+        else:
+            categoria = 'alerta'
+            interp    = (f'Taquicardia ({fc} lpm, {sdnn_txt}). '
+                         'Considerar: taquicardia sinusal (buscar causa subyacente: dolor, hipovolemia, fiebre), '
+                         'TSVP o flutter auricular con conducción 2:1.')
+    else:
+        categoria = 'critico'
+        interp    = (f'Taquicardia severa ({fc} lpm, {sdnn_txt}). '
+                     'Descartar flutter auricular 1:1, taquicardia ventricular o TSVP con aberrancia. '
+                     'Evaluación urgente.')
+
+    # ── Confianza de la detección ────────────────────────────────
+    cv_amp = float(np.std(props['peak_heights']) / (np.mean(props['peak_heights']) + 1e-9))
+    if n_peaks >= 4 and cv_amp < 0.30:
+        confianza = 'alta'
+    elif n_peaks >= 2 and cv_amp < 0.55:
+        confianza = 'media'
+    else:
+        confianza = 'baja'
+
+    return {
+        'frecuencia_cardiaca':      fc,
+        'ritmo':                    ritmo_str,
+        'ritmo_regular':            not irregular,
+        'intervalo_rr_promedio_ms': round(rr_ms_mean, 1),
+        'variabilidad_rr_ms':       round(rr_ms_std, 1),
+        'num_latidos':              n_peaks,
+        'interpretacion':           interp,
+        'categoria':                categoria,   # normal | alerta | critico | error
+        'confianza':                confianza,   # alta | media | baja
+    }
+
+
+# ================================================================
 #  RUTAS
 # ================================================================
 
@@ -388,6 +552,59 @@ def obtener_aleatorio():
 
     except Exception as e:
         return jsonify({'estado': 'error', 'mensaje': f'Error PhysioNet (random): {str(e)}'})
+
+
+@app.route('/api/ecg/interpretar/<path:paciente_id>')
+def interpretar_derivaciones(paciente_id):
+    """
+    Ejecuta interpretar_ecg() sobre la señal filtrada del paciente
+    y devuelve el reporte clínico completo en JSON.
+
+    Derivaciones analizadas en orden de preferencia:
+    DII → V5 → V1 → I → III → aVF
+    """
+    try:
+        partes            = paciente_id.split('/')
+        carpeta           = f'{partes[0]}/{partes[1]}'
+        archivo           = partes[2]
+        directorio_exacto = f'ptb-xl/1.0.3/{carpeta}'
+
+        record  = wfdb.rdrecord(archivo, pn_dir=directorio_exacto)
+        fs      = record.fs
+        # Usar la señal COMPLETA (10 s a 500 Hz = 5 000 muestras) para
+        # obtener suficientes intervalos R-R y calcular SDNN con precisión.
+        # El monitor visual usa solo 3 s; aquí necesitamos más datos.
+        nombres = [str(c).lower().strip() for c in record.sig_name]
+
+        # Seleccionar la mejor derivación disponible para análisis de ritmo
+        PREFERENCIAS = ['ii', 'v5', 'v1', 'i', 'iii', 'avf']
+        senal_np       = None
+        derivacion_ok  = None
+
+        for der in PREFERENCIAS:
+            if der in nombres:
+                idx      = nombres.index(der)
+                senal_np = np.nan_to_num(record.p_signal[:, idx])  # señal completa
+                derivacion_ok = der.upper()
+                break
+
+        if senal_np is None:
+            return jsonify(_ecg_error('No se encontró ninguna derivación compatible.')), 400
+
+        # Aplicar filtro clínico antes del análisis (0.5–40 Hz, Butterworth 4°)
+        senal_filtrada = np.array(
+            _aplicar_filtro(senal_np, fs, 'filtrada_total')
+        )
+
+        resultado = interpretar_ecg(senal_filtrada, sampling_rate=fs)
+        resultado['derivacion_analizada'] = derivacion_ok
+        resultado['paciente_id']          = paciente_id
+        resultado['segundos_analizados']  = round(len(senal_filtrada) / fs, 1)
+
+        return jsonify(resultado)
+
+    except Exception as e:
+        return jsonify(_ecg_error(f'Error en el análisis: {str(e)}')), 500
 
 
 # ================================================================
@@ -877,6 +1094,11 @@ def quiz():
     return render_template('quiz.html')
 
 
+@app.route('/ayuda')
+def ayuda():
+    return render_template('ayuda.html')
+
+
 @app.route('/api/quiz/random')
 def quiz_aleatorio():
     caso = random.choice(CASOS_QUIZ)
@@ -900,6 +1122,110 @@ def quiz_aleatorio():
         })
     except Exception as e:
         return jsonify({'estado': 'error', 'mensaje': str(e)})
+
+
+# ================================================================
+#  BASE DE CONOCIMIENTO — GUÍAS CLÍNICAS EN PDF
+# ================================================================
+
+_CONOCIMIENTO_DIR = os.path.join(os.path.dirname(__file__), 'conocimiento')
+_BASE_CONOCIMIENTO = ""   # se llena una sola vez al arrancar el servidor
+
+
+# --- extractor de texto HTML sin dependencias externas ---
+import html as _html_mod
+from html.parser import HTMLParser as _HTMLParser
+
+class _HTMLTextExtractor(_HTMLParser):
+    _SKIP_TAGS = {'script', 'style', 'nav', 'footer', 'header', 'aside', 'noscript'}
+
+    def __init__(self):
+        super().__init__()
+        self._parts = []
+        self._depth = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self._SKIP_TAGS:
+            self._depth += 1
+
+    def handle_endtag(self, tag):
+        if tag in self._SKIP_TAGS and self._depth:
+            self._depth -= 1
+
+    def handle_data(self, data):
+        if self._depth == 0:
+            text = data.strip()
+            if text:
+                self._parts.append(text)
+
+    def get_text(self):
+        return '\n'.join(self._parts)
+
+
+def _extraer_texto_url(url):
+    """Descarga una URL y devuelve su texto legible (sin HTML)."""
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+    with urllib.request.urlopen(req, timeout=15) as resp:
+        charset = resp.headers.get_content_charset('utf-8')
+        html_bytes = resp.read()
+    html_str = html_bytes.decode(charset, errors='replace')
+    extractor = _HTMLTextExtractor()
+    extractor.feed(_html_mod.unescape(html_str))
+    return extractor.get_text()
+
+
+def _cargar_conocimiento():
+    """Lee PDFs y URLs de la carpeta conocimiento/ y construye la base de conocimiento."""
+    global _BASE_CONOCIMIENTO
+    if not os.path.isdir(_CONOCIMIENTO_DIR):
+        return
+
+    bloques = []
+
+    # --- PDFs ---
+    if _PDF_OK:
+        for nombre in sorted(os.listdir(_CONOCIMIENTO_DIR)):
+            if not nombre.lower().endswith('.pdf'):
+                continue
+            ruta = os.path.join(_CONOCIMIENTO_DIR, nombre)
+            try:
+                with pdfplumber.open(ruta) as pdf:
+                    paginas = [p.extract_text() or '' for p in pdf.pages]
+                texto = '\n'.join(paginas).strip()
+                if texto:
+                    titulo = os.path.splitext(nombre)[0].replace('_', ' ').replace('-', ' ')
+                    bloques.append(f"=== {titulo.upper()} ===\n{texto}")
+                    print(f"[Monitor-Bot] PDF cargado: {nombre} ({len(texto):,} caracteres)")
+            except Exception as e:
+                print(f"[Monitor-Bot] No se pudo leer {nombre}: {e}")
+    else:
+        print("[Monitor-Bot] pdfplumber no instalado — ejecuta: pip install pdfplumber")
+
+    # --- URLs (urls.txt) ---
+    urls_path = os.path.join(_CONOCIMIENTO_DIR, 'urls.txt')
+    if os.path.isfile(urls_path):
+        with open(urls_path, encoding='utf-8') as f:
+            lineas = f.readlines()
+        urls = [l.strip() for l in lineas if l.strip() and not l.strip().startswith('#')]
+        for url in urls:
+            try:
+                texto = _extraer_texto_url(url)
+                if texto:
+                    # Limitar a 50 000 caracteres por URL para no saturar el contexto
+                    texto = texto[:50_000]
+                    bloques.append(f"=== FUENTE WEB: {url} ===\n{texto}")
+                    print(f"[Monitor-Bot] URL cargada: {url} ({len(texto):,} caracteres)")
+            except Exception as e:
+                print(f"[Monitor-Bot] No se pudo leer URL {url}: {e}")
+
+    _BASE_CONOCIMIENTO = '\n\n'.join(bloques)
+    if _BASE_CONOCIMIENTO:
+        print(f"[Monitor-Bot] Base de conocimiento lista: {len(_BASE_CONOCIMIENTO):,} caracteres en total")
+    elif os.path.isdir(_CONOCIMIENTO_DIR):
+        print("[Monitor-Bot] La carpeta conocimiento/ no tiene PDFs ni URLs configuradas.")
+
+
+_cargar_conocimiento()
 
 
 # ================================================================
@@ -1083,10 +1409,21 @@ def chat_bot():
     mapa           = _mapa_leads(meta.get('scp_codigos', []) if meta else [])
     visual         = _estado_visual(ctx_visual)
 
+    seccion_guias = ""
+    if _BASE_CONOCIMIENTO:
+        seccion_guias = f"""
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MATERIAL DE REFERENCIA CLÍNICA (guías oficiales del diplomado)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{_BASE_CONOCIMIENTO}
+
+"""
+
     system_prompt = f"""Eres Monitor-Bot, el Instructor de IA de Cuidado Crítico de la Universidad del Magdalena. \
 Tienes acceso completo al estado actual del Monitor Clínico de ECG que está viendo el estudiante: \
 sabes qué paciente está cargado, su diagnóstico verificado por cardiólogo, el informe clínico completo \
-y exactamente qué debería mostrar cada derivación del ECG según ese diagnóstico.
+y exactamente qué debería mostrar cada derivación del ECG según ese diagnóstico. \
+Además dispones del material de referencia clínica oficial del diplomado para fundamentar tus explicaciones.{seccion_guias}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 DATOS DEL PACIENTE ACTUALMENTE EN EL MONITOR

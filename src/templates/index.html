@@ -16,6 +16,7 @@
                     <h1>Yuluka-EKG</h1>
                     <p>Análisis de Bioseñales &mdash; 12 Derivaciones Estándar</p>
                     <a href="/quiz" class="btn-quiz-header">&#9874; Examen Cl&iacute;nico</a>
+                    <a href="/ayuda" class="btn-ayuda-header">&#10067; Ayuda</a>
                 </div>
                 <div class="header-user-area">
                     {% if current_user.is_authenticated %}
@@ -200,36 +201,36 @@
                     <svg viewBox="0 0 340 280" xmlns="http://www.w3.org/2000/svg" class="svg-corazon">
 
                         <!-- Anterior (verde, arriba) -->
-                        <path class="cara-sector" data-cara="anterior" fill="#16a34a"
+                        <path class="cara-sector" data-cara="anterior" fill="#4ade80"
                               d="M 140 110 L 99 69 A 100 100 0 0 1 241 69 L 200 110 A 42 42 0 0 0 140 110 Z"/>
                         <!-- Septal (azul, derecha) -->
-                        <path class="cara-sector" data-cara="septal" fill="#2563eb"
+                        <path class="cara-sector" data-cara="septal" fill="#60a5fa"
                               d="M 200 110 L 241 69 A 100 100 0 0 1 241 211 L 200 170 A 42 42 0 0 0 200 110 Z"/>
                         <!-- Inferior (rojo, abajo) -->
-                        <path class="cara-sector" data-cara="inferior" fill="#dc2626"
+                        <path class="cara-sector" data-cara="inferior" fill="#f87171"
                               d="M 200 170 L 241 211 A 100 100 0 0 1 99 211 L 140 170 A 42 42 0 0 0 200 170 Z"/>
                         <!-- Lateral (naranja, izquierda) -->
-                        <path class="cara-sector" data-cara="lateral" fill="#ea580c"
+                        <path class="cara-sector" data-cara="lateral" fill="#fb923c"
                               d="M 140 170 L 99 211 A 100 100 0 0 1 99 69 L 140 110 A 42 42 0 0 0 140 170 Z"/>
 
                         <!-- Cavidad VI (centro) -->
-                        <circle cx="170" cy="140" r="42" fill="white" stroke="#e2e8f0" stroke-width="1.5"/>
-                        <text x="170" y="136" text-anchor="middle" font-size="13" font-weight="800" fill="#4a5568">VI</text>
-                        <text x="170" y="149" text-anchor="middle" font-size="8.5" fill="#a0aec0">Vent. Izq.</text>
+                        <circle cx="170" cy="140" r="42" fill="#1a1f2b" stroke="#30363d" stroke-width="1.5"/>
+                        <text x="170" y="136" text-anchor="middle" font-size="13" font-weight="800" fill="#e6edf3">VI</text>
+                        <text x="170" y="149" text-anchor="middle" font-size="8.5" fill="#8b949e">Vent. Izq.</text>
 
                         <!-- Etiquetas externas -->
-                        <text x="170" y="47" text-anchor="middle" font-size="10" font-weight="800" fill="#15803d">ANTERIOR</text>
-                        <text x="170" y="58" text-anchor="middle" font-size="9" fill="#166534">V3 &middot; V4</text>
+                        <text x="170" y="47" text-anchor="middle" font-size="10" font-weight="800" fill="#4ade80">ANTERIOR</text>
+                        <text x="170" y="58" text-anchor="middle" font-size="9" fill="#86efac">V3 &middot; V4</text>
 
-                        <text x="244" y="133" text-anchor="start" font-size="10" font-weight="800" fill="#1d4ed8">SEPTAL</text>
-                        <text x="244" y="145" text-anchor="start" font-size="9" fill="#1e40af">V1 &middot; V2</text>
+                        <text x="244" y="133" text-anchor="start" font-size="10" font-weight="800" fill="#60a5fa">SEPTAL</text>
+                        <text x="244" y="145" text-anchor="start" font-size="9" fill="#93c5fd">V1 &middot; V2</text>
 
-                        <text x="170" y="224" text-anchor="middle" font-size="10" font-weight="800" fill="#b91c1c">INFERIOR</text>
-                        <text x="170" y="235" text-anchor="middle" font-size="9" fill="#991b1b">II &middot; III &middot; aVF</text>
+                        <text x="170" y="224" text-anchor="middle" font-size="10" font-weight="800" fill="#f87171">INFERIOR</text>
+                        <text x="170" y="235" text-anchor="middle" font-size="9" fill="#fca5a5">II &middot; III &middot; aVF</text>
 
-                        <text x="96" y="133" text-anchor="end" font-size="10" font-weight="800" fill="#c2410c">LATERAL</text>
-                        <text x="96" y="144" text-anchor="end" font-size="9" fill="#9a3412">I &middot; aVL</text>
-                        <text x="96" y="155" text-anchor="end" font-size="9" fill="#9a3412">V5 &middot; V6</text>
+                        <text x="96" y="133" text-anchor="end" font-size="10" font-weight="800" fill="#fb923c">LATERAL</text>
+                        <text x="96" y="144" text-anchor="end" font-size="9" fill="#fdba74">I &middot; aVL</text>
+                        <text x="96" y="155" text-anchor="end" font-size="9" fill="#fdba74">V5 &middot; V6</text>
 
                     </svg>
                     <p class="diagrama-subtitulo">Corte transversal del VI &middot; Vista inferior</p>
@@ -277,6 +278,63 @@
             <div class="contenedor-derivacion"><div class="etiqueta-derivacion">V6</div><canvas id="grafica_V6"></canvas></div>
         </div>
         <p class="hint-zoom">Haz clic en cualquier derivación para abrir la cuadrícula de precisión interactiva</p>
+
+        <!-- ================================================
+             REPORTE CLÍNICO AUTOMÁTICO — SciPy ECG Analysis
+             ================================================ -->
+        <div class="reporte-clinico" id="reporte-clinico">
+            <div class="reporte-header">
+                <span class="reporte-titulo">Reporte Cl&iacute;nico Autom&aacute;tico</span>
+                <span class="reporte-badge-ia">SciPy · IA-ECG</span>
+                <span class="reporte-hint">Detecci&oacute;n R-peak &middot; Solo uso educativo &mdash; no reemplaza criterio m&eacute;dico</span>
+            </div>
+            <div class="reporte-cuerpo">
+
+                <!-- Estado inicial -->
+                <div id="reporte-placeholder" class="reporte-estado">
+                    Carga un paciente para obtener el an&aacute;lisis autom&aacute;tico del ECG
+                </div>
+
+                <!-- Estado cargando -->
+                <div id="reporte-cargando" class="reporte-estado" style="display:none">
+                    <div class="spinner-sm"></div>
+                    Analizando se&ntilde;al ECG&hellip;
+                </div>
+
+                <!-- Contenido del reporte -->
+                <div id="reporte-contenido" style="display:none">
+                    <div class="reporte-metricas">
+                        <div class="metrica-card" id="mcard-fc">
+                            <div class="metrica-valor" id="reporte-fc">—</div>
+                            <div class="metrica-label">Frec. Card&iacute;aca<br><small>lpm</small></div>
+                        </div>
+                        <div class="metrica-card">
+                            <div class="metrica-badge" id="reporte-ritmo-badge">—</div>
+                            <div class="metrica-label">Ritmo</div>
+                        </div>
+                        <div class="metrica-card">
+                            <div class="metrica-valor metrica-sec" id="reporte-rr">—</div>
+                            <div class="metrica-label">RR Promedio<br><small>ms</small></div>
+                        </div>
+                        <div class="metrica-card">
+                            <div class="metrica-valor metrica-sec" id="reporte-sdnn">—</div>
+                            <div class="metrica-label">SDNN<br><small>ms</small></div>
+                        </div>
+                    </div>
+                    <div class="reporte-interp" id="reporte-interp"></div>
+                    <div class="reporte-meta">
+                        <span class="reporte-tag" id="reporte-derivacion-tag"></span>
+                        <span class="reporte-tag" id="reporte-latidos-tag"></span>
+                        <span class="reporte-tag" id="reporte-confianza-tag"></span>
+                    </div>
+                </div>
+
+                <!-- Error -->
+                <div id="reporte-error" class="reporte-estado reporte-err" style="display:none"></div>
+
+            </div>
+        </div>
+
     </div>
 
     <!-- ====================================================

@@ -163,6 +163,7 @@ function poblarFichaClinica(meta) {
 
     // Auto-resaltar territorios desde los códigos SCP del diagnóstico
     autoResaltarDesdeSCP(meta.scp_codigos);
+
 }
 
 // --- LÓGICA DE COMUNICACIÓN CON PYTHON ---
@@ -183,6 +184,9 @@ function solicitarSenales() {
 
                 // Poblar la ficha clínica con los metadatos recibidos
                 poblarFichaClinica(datosRecibidos.metadatos);
+
+                // Reporte clínico automático
+                cargarReporte(pacienteActual);
 
                 // Resetear chat si cambió el paciente
                 if (_chatUltimoPaciente !== pacienteActual) {
@@ -253,6 +257,9 @@ function solicitarAleatorio() {
             poblarFichaClinica(datos.metadatos);
             mostrarBadgeAleatorio(datos.paciente, datos.metadatos);
 
+            // Reporte clínico automático
+            cargarReporte(pacienteActual);
+
             // Resetear chat con nuevo contexto de paciente aleatorio
             if (_chatUltimoPaciente !== pacienteActual) {
                 _chatUltimoPaciente = pacienteActual;
@@ -265,6 +272,76 @@ function solicitarAleatorio() {
                 renderZoom();
             }
         });
+}
+
+// ================================================================
+//  REPORTE CLÍNICO AUTOMÁTICO — SciPy ECG Analysis
+// ================================================================
+
+function cargarReporte(pacienteId) {
+    document.getElementById('reporte-placeholder').style.display = 'none';
+    document.getElementById('reporte-cargando').style.display    = 'flex';
+    document.getElementById('reporte-contenido').style.display   = 'none';
+    document.getElementById('reporte-error').style.display       = 'none';
+
+    fetch(`/api/ecg/interpretar/${pacienteId}`)
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('reporte-cargando').style.display = 'none';
+            if (data.categoria === 'error' || data.error) {
+                const msg = data.interpretacion || data.error || 'Error desconocido.';
+                const err = document.getElementById('reporte-error');
+                err.textContent  = '⚠ ' + msg;
+                err.style.display = 'flex';
+                return;
+            }
+            renderReporte(data);
+        })
+        .catch(err => {
+            document.getElementById('reporte-cargando').style.display = 'none';
+            const errEl = document.getElementById('reporte-error');
+            errEl.textContent   = '⚠ Error de conexión: ' + err.message;
+            errEl.style.display = 'flex';
+        });
+}
+
+function renderReporte(d) {
+    document.getElementById('reporte-contenido').style.display = 'block';
+
+    // Frecuencia cardíaca
+    document.getElementById('reporte-fc').textContent = d.frecuencia_cardiaca ?? '—';
+    const mcard = document.getElementById('mcard-fc');
+    const cat   = d.categoria === 'normal' ? 'normal'
+                : d.categoria === 'critico' ? 'critico' : 'alerta';
+    mcard.className = `metrica-card mcard-fc-${cat}`;
+
+    // Ritmo
+    const badge = document.getElementById('reporte-ritmo-badge');
+    badge.textContent = d.ritmo ?? '—';
+    badge.className   =
+        d.ritmo_regular === true  ? 'metrica-badge ritmo-regular'
+      : d.ritmo_regular === false ? 'metrica-badge ritmo-irregular'
+      :                             'metrica-badge ritmo-indeterminado';
+
+    // RR e SDNN
+    document.getElementById('reporte-rr').textContent   = d.intervalo_rr_promedio_ms ?? '—';
+    document.getElementById('reporte-sdnn').textContent = d.variabilidad_rr_ms       ?? '—';
+
+    // Interpretación
+    const interp = document.getElementById('reporte-interp');
+    interp.textContent = d.interpretacion ?? '';
+    interp.className   = `reporte-interp interp-${d.categoria || 'normal'}`;
+
+    // Tags meta
+    const der  = document.getElementById('reporte-derivacion-tag');
+    const lat  = document.getElementById('reporte-latidos-tag');
+    const conf = document.getElementById('reporte-confianza-tag');
+
+    const seg = d.segundos_analizados ? ` · ${d.segundos_analizados} s` : '';
+    der.textContent  = `Derivación: ${d.derivacion_analizada ?? '—'}${seg}`;
+    lat.textContent  = `${d.num_latidos ?? 0} latidos detectados`;
+    conf.textContent = `Confianza: ${d.confianza ?? '—'}`;
+    conf.className   = `reporte-tag tag-${d.confianza ?? 'baja'}`;
 }
 
 // ================================================================
@@ -337,8 +414,8 @@ function inicializarDSP() {
 const CARAS = {
     anterior: {
         leads: ['V3','V4'],
-        color: '#16a34a', shadow: 'rgba(22,163,74,0.28)',
-        bgColor: '#dcfce7',
+        color: '#4ade80', shadow: 'rgba(74,222,128,0.28)',
+        bgColor: 'rgba(22,163,74,0.15)',
         nombre: 'Cara Anterior',
         arteria: 'DAI — Descendente Anterior Izquierda', arteriaBadge: 'LAD',
         desc: 'Pared anterior del ventrículo izquierdo. Irrigada por la arteria descendente anterior (rama de la coronaria izquierda).',
@@ -346,8 +423,8 @@ const CARAS = {
     },
     septal: {
         leads: ['V1','V2'],
-        color: '#2563eb', shadow: 'rgba(37,99,235,0.28)',
-        bgColor: '#dbeafe',
+        color: '#60a5fa', shadow: 'rgba(96,165,250,0.28)',
+        bgColor: 'rgba(37,99,235,0.15)',
         nombre: 'Cara Septal',
         arteria: 'DAI — Descendente Anterior Izquierda', arteriaBadge: 'LAD',
         desc: 'Tabique interventricular. Irrigado por ramas septales de la DAI, comprometido en oclusiones proximales.',
@@ -355,8 +432,8 @@ const CARAS = {
     },
     inferior: {
         leads: ['II','III','aVF'],
-        color: '#dc2626', shadow: 'rgba(220,38,38,0.28)',
-        bgColor: '#fee2e2',
+        color: '#f87171', shadow: 'rgba(248,113,113,0.28)',
+        bgColor: 'rgba(220,38,38,0.15)',
         nombre: 'Cara Inferior',
         arteria: 'ACD — Arteria Coronaria Derecha', arteriaBadge: 'RCA',
         desc: 'Pared inferior o diafragmática del VI. Irrigada por la ACD en el 80% (dominancia derecha) o por la LCx (dominancia izquierda).',
@@ -364,8 +441,8 @@ const CARAS = {
     },
     lateral: {
         leads: ['I','aVL','V5','V6'],
-        color: '#ea580c', shadow: 'rgba(234,88,12,0.28)',
-        bgColor: '#ffedd5',
+        color: '#fb923c', shadow: 'rgba(251,146,60,0.28)',
+        bgColor: 'rgba(234,88,12,0.15)',
         nombre: 'Cara Lateral',
         arteria: 'LCx — Arteria Circunfleja', arteriaBadge: 'LCx',
         desc: 'Pared lateral del ventrículo izquierdo. Irrigada por la arteria circunfleja, rama de la coronaria izquierda.',
@@ -373,8 +450,8 @@ const CARAS = {
     },
     derecho: {
         leads: ['aVR'],
-        color: '#7c3aed', shadow: 'rgba(124,58,237,0.28)',
-        bgColor: '#ede9fe',
+        color: '#a78bfa', shadow: 'rgba(167,139,250,0.28)',
+        bgColor: 'rgba(124,58,237,0.15)',
         nombre: 'Vector de Referencia (aVR)',
         arteria: 'TCI — Tronco Coronario Izquierdo', arteriaBadge: 'TCI',
         desc: 'aVR mira el corazón desde arriba-derecha. Su polaridad es la inversa de la cara lateral. No se usa para localizar isquemia típica.',

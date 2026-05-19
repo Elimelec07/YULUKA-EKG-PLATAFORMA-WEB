@@ -67,9 +67,351 @@ function dibujarCanal(canvasId, datos, fs) {
 let casoActual       = null;
 let correctas        = 0;
 let totalRespondidas = 0;
-let respuestasDadas  = {};   // { preguntaId: opcionId }
-let preguntasOrden   = [];   // orden de IDs de preguntas
+let respuestasDadas  = {};
+let preguntasOrden   = [];
 let casosVistosHoy   = 0;
+
+// ── Datos ECG del caso activo (para el zoom) ──────────────────
+let _datosECG = {};
+let _fsECG    = 500;
+
+// ================================================================
+//  CUADRÍCULA DE PRECISIÓN INTERACTIVA (mismo motor que el monitor)
+// ================================================================
+
+let _datosZoom = null;
+let _labelZoom = '';
+let _fsZoom    = 500;
+let _vista     = { x: 0, y: 0, ancho: 75, alto: 50 };
+
+let _arrastrandoZoom = false;
+let _arrastreZoom    = { cx0:0, cy0:0, vx0:0, vy0:0 };
+
+let _modoMedicion   = false;
+let _puntosM        = [];
+let _cursorMm       = null;
+
+function _canvasAMm(cx, cy) {
+    const c = document.getElementById('canvas-zoom');
+    return {
+        x: (cx / c.offsetWidth)  * _vista.ancho + _vista.x,
+        y: (cy / c.offsetHeight) * _vista.alto  + _vista.y,
+    };
+}
+
+function _mmAPx(mx, my) {
+    const c = document.getElementById('canvas-zoom');
+    return {
+        x: (mx - _vista.x) / _vista.ancho * c.width,
+        y: (my - _vista.y) / _vista.alto  * c.height,
+    };
+}
+
+function _aplicarZoom(factor, cxMm, cyMm) {
+    const nAncho = Math.max(2, Math.min(75, _vista.ancho * factor));
+    const nAlto  = nAncho * (50 / 75);
+    const rx = (cxMm - _vista.x) / _vista.ancho;
+    const ry = (cyMm - _vista.y) / _vista.alto;
+    _vista.x     = cxMm - rx * nAncho;
+    _vista.y     = cyMm - ry * nAlto;
+    _vista.ancho = nAncho;
+    _vista.alto  = nAlto;
+    document.getElementById('zoom-nivel').textContent =
+        `${(75 / _vista.ancho).toFixed(1)}×`;
+}
+
+function _rrect(ctx, x, y, w, h, r) {
+    if (ctx.roundRect) { ctx.roundRect(x, y, w, h, r); return; }
+    ctx.moveTo(x+r, y);
+    ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+    ctx.lineTo(x+r, y+h); ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+    ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y);
+    ctx.closePath();
+}
+
+function _renderZoom() {
+    const canvas = document.getElementById('canvas-zoom');
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    ctx.fillStyle = '#fff5f5';
+    ctx.fillRect(0, 0, W, H);
+
+    const pxXpMm = W / _vista.ancho;
+    const pxYpMm = H / _vista.alto;
+
+    // Cuadrícula
+    for (let mm = Math.floor(_vista.x); mm <= Math.ceil(_vista.x + _vista.ancho); mm++) {
+        const px = (mm - _vista.x) / _vista.ancho * W;
+        const big = mm % 5 === 0;
+        ctx.strokeStyle = big ? 'rgba(210,50,70,0.55)' : 'rgba(210,50,70,0.2)';
+        ctx.lineWidth   = big ? 1.0 : 0.5;
+        ctx.beginPath(); ctx.moveTo(px, 0); ctx.lineTo(px, H); ctx.stroke();
+        if (big && pxXpMm >= 4) {
+            ctx.fillStyle = 'rgba(175,45,65,0.65)';
+            ctx.font = `${Math.min(11, Math.max(9, pxXpMm * 1.4))}px sans-serif`;
+            ctx.fillText(`${mm}mm / ${(mm/25).toFixed(2)}s`, px + 3, H - 4);
+        }
+    }
+    for (let mm = Math.floor(_vista.y); mm <= Math.ceil(_vista.y + _vista.alto); mm++) {
+        const py = (mm - _vista.y) / _vista.alto * H;
+        const big = mm % 5 === 0;
+        ctx.strokeStyle = big ? 'rgba(210,50,70,0.55)' : 'rgba(210,50,70,0.2)';
+        ctx.lineWidth   = big ? 1.0 : 0.5;
+        ctx.beginPath(); ctx.moveTo(0, py); ctx.lineTo(W, py); ctx.stroke();
+        if (big && pxYpMm >= 4) {
+            ctx.fillStyle = 'rgba(175,45,65,0.65)';
+            ctx.font = `${Math.min(11, Math.max(9, pxYpMm * 1.4))}px sans-serif`;
+            ctx.fillText(`${((25 - mm) / 10).toFixed(1)}mV`, 3, py - 3);
+        }
+    }
+
+    // Línea isoeléctrica
+    const yIso = (25 - _vista.y) / _vista.alto * H;
+    if (yIso >= 0 && yIso <= H) {
+        ctx.strokeStyle = 'rgba(210,50,70,0.38)';
+        ctx.lineWidth = 1.5; ctx.setLineDash([6, 4]);
+        ctx.beginPath(); ctx.moveTo(0, yIso); ctx.lineTo(W, yIso); ctx.stroke();
+        ctx.setLineDash([]);
+    }
+
+    // Señal ECG
+    if (_datosZoom?.length) {
+        ctx.strokeStyle = '#111827';
+        ctx.lineWidth   = Math.max(1, Math.min(2.2, pxXpMm * 0.18));
+        ctx.lineJoin    = 'round';
+        ctx.beginPath();
+        let started = false;
+        for (let i = 0; i < _datosZoom.length; i++) {
+            const mmX = (i / _fsZoom) * 25;
+            if (mmX < _vista.x - 0.5 || mmX > _vista.x + _vista.ancho + 0.5) continue;
+            const mmY = 25 - _datosZoom[i] * 10;
+            const px  = (mmX - _vista.x) / _vista.ancho * W;
+            const py  = (mmY - _vista.y) / _vista.alto  * H;
+            if (!started) { ctx.moveTo(px, py); started = true; }
+            else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+    }
+
+    // Crosshair
+    if (_cursorMm) {
+        const cpx = (_cursorMm.x - _vista.x) / _vista.ancho * W;
+        const cpy = (_cursorMm.y - _vista.y) / _vista.alto  * H;
+        ctx.strokeStyle = 'rgba(66,153,225,0.75)';
+        ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(cpx, 0); ctx.lineTo(cpx, H);
+        ctx.moveTo(0, cpy); ctx.lineTo(W, cpy);
+        ctx.stroke(); ctx.setLineDash([]);
+        document.getElementById('info-cursor').textContent =
+            `t = ${(_cursorMm.x/25).toFixed(3)} s  (${_cursorMm.x.toFixed(1)} mm)  ·  ${((25-_cursorMm.y)/10).toFixed(3)} mV`;
+    }
+
+    // Puntos de medición
+    _puntosM.forEach((p, i) => {
+        const { x: px, y: py } = _mmAPx(p.x, p.y);
+        ctx.fillStyle   = i === 0 ? '#48bb78' : '#e53e3e';
+        ctx.strokeStyle = 'white'; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(px, py, 7, 0, Math.PI*2);
+        ctx.fill(); ctx.stroke();
+        ctx.fillStyle = 'white'; ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(i+1, px, py);
+        ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+    });
+
+    // Línea y resultado de medición
+    if (_puntosM.length === 2) {
+        const { x:px1, y:py1 } = _mmAPx(_puntosM[0].x, _puntosM[0].y);
+        const { x:px2, y:py2 } = _mmAPx(_puntosM[1].x, _puntosM[1].y);
+        ctx.strokeStyle = '#805ad5'; ctx.lineWidth = 2; ctx.setLineDash([6,3]);
+        ctx.beginPath(); ctx.moveTo(px1, py1); ctx.lineTo(px2, py2); ctx.stroke();
+        ctx.setLineDash([]);
+        const dxMm = Math.abs(_puntosM[1].x - _puntosM[0].x);
+        const dyMm = Math.abs(_puntosM[1].y - _puntosM[0].y);
+        const dt   = (dxMm/25).toFixed(3);
+        const dv   = (dyMm/10).toFixed(3);
+        const dist = Math.sqrt(dxMm*dxMm + dyMm*dyMm).toFixed(2);
+        const mx = (px1+px2)/2, my = (py1+py2)/2;
+        const bW=186, bH=66;
+        const bX=Math.max(4, Math.min(W-bW-4, mx-bW/2));
+        const bY=Math.max(4, Math.min(H-bH-4, my-bH-12));
+        ctx.fillStyle='rgba(237,233,254,0.95)'; ctx.strokeStyle='rgba(128,90,213,0.7)'; ctx.lineWidth=1.5;
+        ctx.beginPath(); _rrect(ctx, bX, bY, bW, bH, 6); ctx.fill(); ctx.stroke();
+        ctx.fillStyle='#44337a'; ctx.font='bold 11px monospace'; ctx.textAlign='center';
+        ctx.fillText(`Δt = ${dt} s  (${dxMm.toFixed(1)} mm)`,  bX+bW/2, bY+18);
+        ctx.fillText(`ΔV = ${dv} mV  (${dyMm.toFixed(1)} mm)`, bX+bW/2, bY+34);
+        ctx.fillText(`Distancia = ${dist} mm`,                       bX+bW/2, bY+52);
+        ctx.textAlign='left';
+        document.getElementById('info-medicion').textContent =
+            `Δt=${dt}s · ΔV=${dv}mV · Dist=${dist}mm`;
+    }
+}
+
+function abrirModalZoom(label, datos, fs) {
+    _datosZoom     = datos;
+    _labelZoom     = label;
+    _fsZoom        = fs;
+    _vista         = { x:0, y:0, ancho:75, alto:50 };
+    _modoMedicion  = false;
+    _puntosM       = [];
+    _cursorMm      = null;
+    const modal    = document.getElementById('modal-zoom');
+    modal.style.display = 'flex';
+    document.getElementById('modal-zoom-label').textContent = `Derivación ${label}`;
+    document.getElementById('zoom-nivel').textContent       = '1×';
+    document.getElementById('info-cursor').textContent      = 'Mueve el cursor sobre la gráfica';
+    document.getElementById('info-medicion').textContent    = '';
+    document.getElementById('modo-medicion-label').style.display = 'none';
+    document.getElementById('btn-medir').classList.remove('btn-medir-activo');
+    document.getElementById('canvas-zoom').style.cursor    = 'grab';
+    requestAnimationFrame(_renderZoom);
+}
+
+function inicializarModalZoom() {
+    const modal  = document.getElementById('modal-zoom');
+    const canvas = document.getElementById('canvas-zoom');
+
+    // Cerrar
+    document.getElementById('btn-cerrar-modal').addEventListener('click',
+        () => { modal.style.display = 'none'; });
+    modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+    // Zoom +/-
+    document.getElementById('btn-zoom-mas').addEventListener('click', () => {
+        _aplicarZoom(0.55, _vista.x + _vista.ancho/2, _vista.y + _vista.alto/2); _renderZoom();
+    });
+    document.getElementById('btn-zoom-menos').addEventListener('click', () => {
+        _aplicarZoom(1.6,  _vista.x + _vista.ancho/2, _vista.y + _vista.alto/2); _renderZoom();
+    });
+
+    // Reset
+    document.getElementById('btn-reset-zoom').addEventListener('click', () => {
+        _vista = { x:0, y:0, ancho:75, alto:50 };
+        document.getElementById('zoom-nivel').textContent = '1×';
+        _modoMedicion = false; _puntosM = [];
+        document.getElementById('btn-medir').classList.remove('btn-medir-activo');
+        document.getElementById('modo-medicion-label').style.display = 'none';
+        document.getElementById('info-medicion').textContent = '';
+        canvas.style.cursor = 'grab';
+        _renderZoom();
+    });
+
+    // Medir
+    document.getElementById('btn-medir').addEventListener('click', () => {
+        _modoMedicion = !_modoMedicion; _puntosM = [];
+        document.getElementById('info-medicion').textContent = '';
+        document.getElementById('btn-medir').classList.toggle('btn-medir-activo', _modoMedicion);
+        document.getElementById('modo-medicion-label').style.display = _modoMedicion ? 'inline' : 'none';
+        canvas.style.cursor = _modoMedicion ? 'crosshair' : 'grab';
+        _renderZoom();
+    });
+
+    // Scroll = zoom centrado en cursor
+    canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        const rect = canvas.getBoundingClientRect();
+        const mm   = _canvasAMm(e.clientX - rect.left, e.clientY - rect.top);
+        _aplicarZoom(e.deltaY > 0 ? 1.22 : 0.82, mm.x, mm.y);
+        _renderZoom();
+    }, { passive: false });
+
+    // Movimiento del mouse
+    canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+        _cursorMm = _canvasAMm(cx, cy);
+        if (_arrastrandoZoom && !_modoMedicion) {
+            const dxMm = ((_arrastreZoom.cx0 - cx) / canvas.offsetWidth)  * _vista.ancho;
+            const dyMm = ((_arrastreZoom.cy0 - cy) / canvas.offsetHeight) * _vista.alto;
+            _vista.x = _arrastreZoom.vx0 + dxMm;
+            _vista.y = _arrastreZoom.vy0 + dyMm;
+        }
+        _renderZoom();
+    });
+    canvas.addEventListener('mouseleave', () => {
+        _cursorMm = null;
+        document.getElementById('info-cursor').textContent = 'Mueve el cursor sobre la gráfica';
+        _renderZoom();
+    });
+    canvas.addEventListener('mousedown', e => {
+        if (_modoMedicion) return;
+        _arrastrandoZoom = true;
+        const rect = canvas.getBoundingClientRect();
+        _arrastreZoom = {
+            cx0: e.clientX - rect.left, cy0: e.clientY - rect.top,
+            vx0: _vista.x,              vy0: _vista.y,
+        };
+        canvas.style.cursor = 'grabbing';
+    });
+    canvas.addEventListener('mouseup', () => {
+        _arrastrandoZoom = false;
+        canvas.style.cursor = _modoMedicion ? 'crosshair' : 'grab';
+    });
+
+    // Click = punto de medición
+    canvas.addEventListener('click', e => {
+        if (!_modoMedicion) return;
+        const rect = canvas.getBoundingClientRect();
+        const mm   = _canvasAMm(e.clientX - rect.left, e.clientY - rect.top);
+        if (_puntosM.length >= 2) { _puntosM = []; document.getElementById('info-medicion').textContent = ''; }
+        _puntosM.push(mm);
+        if (_puntosM.length === 1)
+            document.getElementById('info-medicion').textContent = 'Haz clic en el segundo punto...';
+        _renderZoom();
+    });
+
+    // Pinch-to-zoom táctil
+    let lastPinch = null;
+    canvas.addEventListener('touchstart', e => {
+        if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            lastPinch = Math.hypot(dx, dy);
+        }
+    }, { passive: true });
+    canvas.addEventListener('touchmove', e => {
+        e.preventDefault();
+        if (e.touches.length === 2 && lastPinch) {
+            const dx   = e.touches[0].clientX - e.touches[1].clientX;
+            const dy   = e.touches[0].clientY - e.touches[1].clientY;
+            const dist = Math.hypot(dx, dy);
+            const rect = canvas.getBoundingClientRect();
+            const midX = (e.touches[0].clientX + e.touches[1].clientX)/2 - rect.left;
+            const midY = (e.touches[0].clientY + e.touches[1].clientY)/2 - rect.top;
+            const mm   = _canvasAMm(midX, midY);
+            _aplicarZoom(lastPinch / dist, mm.x, mm.y);
+            lastPinch = dist;
+            _renderZoom();
+        }
+    }, { passive: false });
+    canvas.addEventListener('touchend', () => { lastPinch = null; });
+
+    // Atajos de teclado (solo cuando el modal está visible)
+    document.addEventListener('keydown', e => {
+        if (modal.style.display === 'none') return;
+        const cx = _vista.x + _vista.ancho/2, cy = _vista.y + _vista.alto/2;
+        const paso = _vista.ancho * 0.12;
+        switch (e.key) {
+            case 'Escape':      modal.style.display = 'none'; break;
+            case '+': case '=': _aplicarZoom(0.6, cx, cy); _renderZoom(); break;
+            case '-':           _aplicarZoom(1.5, cx, cy); _renderZoom(); break;
+            case 'ArrowLeft':   _vista.x -= paso; _renderZoom(); break;
+            case 'ArrowRight':  _vista.x += paso; _renderZoom(); break;
+            case 'ArrowUp':     _vista.y -= paso*(50/75); _renderZoom(); break;
+            case 'ArrowDown':   _vista.y += paso*(50/75); _renderZoom(); break;
+            case 'm': case 'M': document.getElementById('btn-medir').click(); break;
+        }
+    });
+
+    window.addEventListener('resize', () => {
+        if (modal.style.display !== 'none') _renderZoom();
+    });
+}
 
 // ================================================================
 //  CARGA DEL CASO
@@ -145,6 +487,10 @@ const ORDEN_DISPLAY = [
 ];
 
 function renderMonitor(senales, fs) {
+    // Guardar datos para el zoom
+    _datosECG = senales;
+    _fsECG    = fs;
+
     const grid = document.getElementById('quiz-monitor-grid');
     grid.innerHTML = '';
 
@@ -170,6 +516,11 @@ function renderMonitor(senales, fs) {
             div.appendChild(badge);
             div.appendChild(canvas);
             grid.appendChild(div);
+
+            // Click → abrir cuadrícula de precisión
+            div.addEventListener('click', () => {
+                if (_datosECG[canal]) abrirModalZoom(canal, _datosECG[canal], _fsECG);
+            });
         });
     });
 
@@ -522,5 +873,6 @@ function mostrarNavFinal() {
 
 window.onload = () => {
     inicializarModalRetro();
+    inicializarModalZoom();
     cargarCaso();
 };

@@ -9,10 +9,10 @@
 html { overflow-x: hidden; }
 
 body {
-    background-color: #f0f2f5;
+    background-color: #0d1117;
     margin: 0;
     padding: 20px;
-    color: #1a202c;
+    color: #e6edf3;
     overflow-x: hidden;
 }
 
@@ -43,6 +43,26 @@ header {
 .btn-quiz-header:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(37,99,235,0.45);
+}
+
+.btn-ayuda-header {
+    display: inline-block;
+    margin-top: 6px;
+    margin-left: 6px;
+    background: rgba(255,255,255,0.07);
+    color: #c8d8f0;
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 0.03em;
+    transition: background .2s, color .2s;
+}
+.btn-ayuda-header:hover {
+    background: rgba(255,255,255,0.14);
+    color: #fff;
 }
 
 /* Layout con logos — grid de 3 columnas para centrar texto */
@@ -77,7 +97,7 @@ header {
 .btn-user-header:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(37,99,235,0.45); }
 .btn-user-logout {
     font-size: 0.78rem;
-    color: #718096;
+    color: #8b949e;
     text-decoration: none;
     padding: 4px 8px;
     border-radius: 6px;
@@ -97,13 +117,13 @@ header {
 }
 
 header h1 {
-    color: #2d3748;
+    color: #e6edf3;
     margin-bottom: 8px;
     font-size: 2.2rem;
 }
 
 header p {
-    color: #718096;
+    color: #8b949e;
     font-size: 1.1rem;
 }
 
@@ -123,16 +143,16 @@ header p {
 
 .tarjeta {
     flex: 1;
-    background: white;
+    background: #161b22;
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
 }
 
 .tarjeta h3 {
     margin-top: 0;
     margin-bottom: 15px;
-    color: #4a5568;
+    color: #8b949e;
     font-size: 1.1rem;
 }
 
@@ -140,7 +160,7 @@ header p {
    MÓDULO DSP EDUCATIVO — PANEL DE CONFIGURACIÓN DEL MONITOR
    ============================================================ */
 .tarjeta-dsp {
-    background: white;
+    background: #161b22;
     border-left: 5px solid #2563eb;
 }
 
@@ -156,19 +176,19 @@ header p {
     display: flex;
     align-items: center;
     gap: 0;
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid #30363d;
     border-radius: 10px;
     padding: 10px 13px;
     cursor: pointer;
     transition: border-color 0.18s, background 0.18s;
-    background: #f8fafc;
+    background: #1a1f2b;
 }
-.dsp-opcion:hover { border-color: #93c5fd; background: #eff6ff; }
+.dsp-opcion:hover { border-color: #93c5fd; background: rgba(41,121,255,0.12); }
 .dsp-opcion input[type="radio"] { margin-right: 11px; accent-color: #2563eb; cursor: pointer; }
 
 .dsp-opcion-activa {
     border-color: #2563eb;
-    background: #eff6ff;
+    background: rgba(41,121,255,0.12);
 }
 
 .dsp-opcion-cuerpo {
@@ -176,8 +196,8 @@ header p {
     align-items: center;
     gap: 11px;
 }
-.dsp-opcion-texto strong { display: block; font-size: 0.87rem; color: #1e3a5f; }
-.dsp-opcion-texto small  { font-size: 0.76rem; color: #718096; }
+.dsp-opcion-texto strong { display: block; font-size: 0.87rem; color: #90b4ff; }
+.dsp-opcion-texto small  { font-size: 0.76rem; color: #8b949e; }
 
 /* Badges de estado */
 .dsp-badge {
@@ -192,20 +212,20 @@ header p {
     letter-spacing: 0.06em;
     flex-shrink: 0;
 }
-.dsp-badge-raw   { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
-.dsp-badge-notch { background: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
-.dsp-badge-dx    { background: #dcfce7; color: #14532d; border: 1px solid #4ade80; }
+.dsp-badge-raw   { background: rgba(252,211,77,0.12); color: #fcd34d; border: 1px solid rgba(252,211,77,0.3); }
+.dsp-badge-notch { background: rgba(251,146,60,0.12); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
+.dsp-badge-dx    { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
 
 /* Recuadro explicativo */
 .dsp-explicacion {
     display: flex;
     gap: 11px;
-    background: #f0f9ff;
-    border: 1px solid #bae6fd;
+    background: rgba(41,121,255,0.12);
+    border: 1px solid rgba(41,121,255,0.3);
     border-radius: 10px;
     padding: 12px 14px;
     font-size: 0.81rem;
-    color: #1e3a5f;
+    color: #e6edf3;
     line-height: 1.55;
     min-height: 60px;
     align-items: flex-start;
@@ -215,12 +235,12 @@ header p {
 .dsp-exp-cuerpo strong { display: block; margin-bottom: 4px; font-size: 0.83rem; }
 .dsp-exp-cuerpo p { margin: 0 0 6px; }
 .dsp-exp-consejo {
-    background: rgba(37,99,235,0.08);
+    background: rgba(37,99,235,0.15);
     border-left: 3px solid #2563eb;
     padding: 5px 9px;
     border-radius: 4px;
     font-size: 0.78rem;
-    color: #1e40af;
+    color: #90b4ff;
 }
 
 /* ---- Estados visuales del monitor de 12 derivaciones ---- */
@@ -232,9 +252,9 @@ header p {
     content: '⚠ SEÑAL NO PROCESADA — RAW';
     display: block;
     text-align: center;
-    background: #fffbeb;
+    background: rgba(236,201,75,0.12);
     border: 1.5px dashed #ecc94b;
-    color: #92400e;
+    color: #fcd34d;
     font-size: 0.76rem;
     font-weight: 800;
     letter-spacing: 0.08em;
@@ -253,9 +273,9 @@ header p {
     content: '🔶 FILTRO 60 Hz ACTIVO — Deriva basal presente';
     display: block;
     text-align: center;
-    background: #fff7ed;
+    background: rgba(251,146,60,0.12);
     border: 1.5px dashed #fb923c;
-    color: #9a3412;
+    color: #fb923c;
     font-size: 0.76rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -273,9 +293,9 @@ header p {
     content: '✅ MODO DIAGNÓSTICO — Calidad clínica óptima · 0.5–40 Hz';
     display: block;
     text-align: center;
-    background: #f0fdf4;
+    background: rgba(74,222,128,0.12);
     border: 1.5px solid #4ade80;
-    color: #14532d;
+    color: #4ade80;
     font-size: 0.76rem;
     font-weight: 800;
     letter-spacing: 0.06em;
@@ -293,15 +313,15 @@ select {
     padding: 12px;
     margin-bottom: 15px;
     border-radius: 8px;
-    border: 1px solid #e2e8f0;
-    background-color: #f8fafc;
+    border: 1px solid #30363d;
+    background-color: #1a1f2b;
     font-size: 14px;
-    color: #2d3748;
+    color: #e6edf3;
     outline: none;
 }
 
 select:focus {
-    border-color: #cbd5e0;
+    border-color: #8b949e;
 }
 
 button {
@@ -321,8 +341,8 @@ button {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: #ebf8ff;
-    border: 1px solid #90cdf4;
+    background: rgba(41,121,255,0.12);
+    border: 1px solid rgba(41,121,255,0.3);
     border-radius: 6px;
     padding: 6px 10px;
     margin-bottom: 10px;
@@ -331,13 +351,13 @@ button {
 }
 
 .badge-aleatorio-label {
-    color: #2b6cb0;
+    color: #90b4ff;
     font-weight: 600;
     white-space: nowrap;
 }
 
 #badge-aleatorio-id {
-    color: #1a365d;
+    color: #e6edf3;
     font-weight: 700;
     font-family: 'Courier New', monospace;
     word-break: break-all;
@@ -350,13 +370,13 @@ button {
 
 /* Botón Principal (Cargar Monitor) */
 .btn-principal {
-    background-color: #2d3748;
+    background-color: #30363d;
     color: white;
     width: 100%;
 }
 
 .btn-principal:hover {
-    background-color: #1a202c;
+    background-color: #21262d;
     transform: translateY(-1px);
 }
 
@@ -388,16 +408,16 @@ button {
     /* 4 columnas que se ajustan al espacio disponible sin desbordar */
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 12px;
-    background-color: #fff5f5; /* Tono papel térmico */
+    background-color: #161b22;
     padding: 15px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #30363d;
     border-radius: 12px;
 }
 
 .contenedor-derivacion {
     position: relative;
-    background-color: white;
-    /* ASPECT RATIO: Esto garantiza que la cuadrícula interna sea cuadrada 
+    background-color: #0d1117;
+    /* ASPECT RATIO: Esto garantiza que la cuadrícula interna sea cuadrada
        Relación 3 segundos (75mm) / 50mm voltaje = 1.5 */
     aspect-ratio: 1.5;
     width: 100%;
@@ -413,13 +433,13 @@ button {
     left: 6px;
     font-weight: 800;
     font-size: 13px;
-    color: #2d3748;
-    background-color: rgba(255, 255, 255, 0.85);
+    color: #e6edf3;
+    background-color: rgba(22, 27, 34, 0.85);
     padding: 2px 6px;
     border-radius: 4px;
     z-index: 10;
     pointer-events: none; /* No interfiere con clics en la gráfica */
-    border: 1px solid #edf2f7;
+    border: 1px solid #30363d;
 }
 
 /* Asegurar que el canvas llene el contenedor */
@@ -432,12 +452,12 @@ canvas {
    HISTORIA CLÍNICA DIGITAL
    ============================================================ */
 .ficha-clinica {
-    background: white;
+    background: #161b22;
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
     margin-bottom: 25px;
     overflow: hidden;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #30363d;
 }
 
 /* Header oscuro estilo expediente hospitalario */
@@ -498,12 +518,12 @@ canvas {
 .ficha-cuerpo {
     display: grid;
     grid-template-columns: 1fr 1fr 1.6fr 2.2fr;
-    border-top: 2px solid #2d3748;
+    border-top: 2px solid #30363d;
 }
 
 .ficha-seccion {
     padding: 14px 18px;
-    border-right: 1px solid #e2e8f0;
+    border-right: 1px solid #30363d;
 }
 
 .ficha-seccion:last-child {
@@ -515,10 +535,10 @@ canvas {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #a0aec0;
+    color: #8b949e;
     margin-bottom: 10px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #30363d;
 }
 
 .ficha-campo {
@@ -530,7 +550,7 @@ canvas {
 }
 
 .campo-label {
-    color: #718096;
+    color: #8b949e;
     font-weight: 600;
     font-size: 0.78rem;
     white-space: nowrap;
@@ -539,15 +559,15 @@ canvas {
 
 .ficha-campo > span:last-child,
 .ficha-campo > span.badge-marcapaso {
-    color: #1a202c;
+    color: #e6edf3;
     font-weight: 700;
     font-size: 0.88rem;
     text-align: right;
 }
 
 .badge-marcapaso {
-    background: #bee3f8;
-    color: #2b6cb0;
+    background: rgba(41,121,255,0.15);
+    color: #90b4ff;
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.73rem !important;
@@ -580,10 +600,10 @@ canvas {
     font-weight: 700;
 }
 
-.scp-normal  { background: #c6f6d5; color: #22543d; border: 1px solid #9ae6b4; }
-.scp-peligro { background: #fed7d7; color: #9b2c2c; border: 1px solid #fc8181; }
-.scp-alerta  { background: #feebc8; color: #7b341e; border: 1px solid #f6ad55; }
-.scp-info    { background: #bee3f8; color: #2c5282; border: 1px solid #90cdf4; }
+.scp-normal  { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
+.scp-peligro { background: rgba(252,165,165,0.12); color: #fc8181; border: 1px solid rgba(252,165,165,0.35); }
+.scp-alerta  { background: rgba(252,211,77,0.12); color: #fcd34d; border: 1px solid rgba(252,211,77,0.35); }
+.scp-info    { background: rgba(41,121,255,0.12); color: #90b4ff; border: 1px solid rgba(41,121,255,0.35); }
 
 /* Informe clínico */
 .ficha-seccion-informe {
@@ -594,13 +614,13 @@ canvas {
 
 .informe-texto {
     font-size: 0.82rem;
-    color: #4a5568;
+    color: #8b949e;
     font-style: italic;
     line-height: 1.55;
-    background: #f8fafc;
+    background: #1a1f2b;
     padding: 9px 12px;
     border-radius: 6px;
-    border-left: 3px solid #cbd5e0;
+    border-left: 3px solid #30363d;
     min-height: 44px;
     flex: 1;
 }
@@ -613,9 +633,9 @@ canvas {
 }
 
 .calidad-tag {
-    background: #fef3c7;
-    color: #78350f;
-    border: 1px solid #fde68a;
+    background: rgba(252,211,77,0.12);
+    color: #fcd34d;
+    border: 1px solid rgba(252,211,77,0.3);
     padding: 2px 9px;
     border-radius: 4px;
     font-size: 0.7rem;
@@ -630,14 +650,14 @@ canvas {
     .ficha-seccion:nth-child(2) { border-right: none; }
     .ficha-seccion:nth-child(3),
     .ficha-seccion:nth-child(4) {
-        border-top: 1px solid #e2e8f0;
+        border-top: 1px solid #30363d;
         grid-column: span 1;
     }
 }
 
 @media (max-width: 640px) {
     .ficha-cuerpo { grid-template-columns: 1fr; }
-    .ficha-seccion { border-right: none; border-top: 1px solid #e2e8f0; }
+    .ficha-seccion { border-right: none; border-top: 1px solid #30363d; }
     .ficha-seccion:first-child { border-top: none; }
 }
 
@@ -645,12 +665,12 @@ canvas {
    PANEL ANATÓMICO — MAPA DE TERRITORIOS CORONARIOS
    ============================================================ */
 .panel-anatomia {
-    background: white;
+    background: #161b22;
     border-radius: 12px;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
     margin-bottom: 25px;
     overflow: hidden;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #30363d;
 }
 
 .panel-anatomia-header {
@@ -688,8 +708,8 @@ canvas {
     flex-direction: column;
     align-items: center;
     padding: 14px 8px 8px;
-    border-right: 1px solid #e2e8f0;
-    background: #fafafa;
+    border-right: 1px solid #30363d;
+    background: #1a1f2b;
 }
 
 .svg-corazon {
@@ -701,13 +721,13 @@ canvas {
 /* Sectores interactivos */
 .cara-sector {
     transition: opacity 0.18s ease, filter 0.18s ease;
-    opacity: 0.72;
+    opacity: 0.88;
     cursor: pointer;
 }
 
 .cara-sector:hover {
     opacity: 1;
-    filter: brightness(1.12) drop-shadow(0 2px 8px rgba(0,0,0,0.35));
+    filter: brightness(1.18) drop-shadow(0 2px 10px rgba(0,0,0,0.5));
 }
 
 .cara-activa {
@@ -755,7 +775,7 @@ canvas {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    color: #cbd5e0;
+    color: #8b949e;
     text-align: center;
     height: 100%;
 }
@@ -763,7 +783,7 @@ canvas {
 .placeholder-flecha {
     font-size: 1.5rem;
     letter-spacing: 6px;
-    color: #e2e8f0;
+    color: #30363d;
 }
 
 .anatomia-placeholder p {
@@ -782,23 +802,23 @@ canvas {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-left: 5px solid #4a5568;
+    border-left: 5px solid #8b949e;
     padding: 8px 14px;
     border-radius: 0 6px 6px 0;
-    background: #f8fafc;
+    background: #1a1f2b;
     transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .cara-nombre {
     font-size: 1.1rem;
     font-weight: 800;
-    color: #1a202c;
+    color: #e6edf3;
 }
 
 .cara-leads {
     font-family: 'Courier New', monospace;
     font-size: 0.82rem;
-    color: #718096;
+    color: #8b949e;
     font-weight: 600;
 }
 
@@ -807,7 +827,7 @@ canvas {
     align-items: center;
     gap: 8px;
     padding: 7px 12px;
-    background: #f8fafc;
+    background: #1a1f2b;
     border-radius: 6px;
     flex-wrap: wrap;
 }
@@ -817,7 +837,7 @@ canvas {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #a0aec0;
+    color: #8b949e;
     white-space: nowrap;
 }
 
@@ -833,39 +853,39 @@ canvas {
 .arteria-nombre {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #2d3748;
+    color: #e6edf3;
 }
 
 .anatomia-desc-texto {
     font-size: 0.81rem;
-    color: #2c5282;
+    color: #90b4ff;
     line-height: 1.55;
     padding: 9px 12px;
-    background: #ebf8ff;
+    background: rgba(41,121,255,0.12);
     border-radius: 6px;
-    border-left: 3px solid #90cdf4;
+    border-left: 3px solid rgba(41,121,255,0.5);
 }
 
 .anatomia-signos-texto {
     font-size: 0.79rem;
-    color: #744210;
+    color: #fcd34d;
     line-height: 1.55;
     padding: 9px 12px;
-    background: #fffbeb;
+    background: rgba(236,201,75,0.12);
     border-radius: 6px;
-    border-left: 3px solid #f6ad55;
+    border-left: 3px solid rgba(252,211,77,0.4);
     font-style: italic;
 }
 
 @media (max-width: 860px) {
     .panel-anatomia-cuerpo { flex-direction: column; }
-    .diagrama-corazon { border-right: none; border-bottom: 1px solid #e2e8f0; }
+    .diagrama-corazon { border-right: none; border-bottom: 1px solid #30363d; }
 }
 
 /* Hint de zoom debajo del monitor */
 .hint-zoom {
     text-align: center;
-    color: #718096;
+    color: #8b949e;
     font-size: 0.82rem;
     margin-top: 10px;
     margin-bottom: 0;
@@ -891,8 +911,8 @@ canvas {
     font-weight: 700;
     letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(66, 153, 225, 0.85);
-    background: rgba(255, 255, 255, 0.88);
+    color: rgba(66, 153, 225, 0.9);
+    background: rgba(22, 27, 34, 0.88);
     padding: 1px 5px;
     border-radius: 3px;
     opacity: 0;
@@ -902,6 +922,188 @@ canvas {
 
 .contenedor-derivacion:hover::after {
     opacity: 1;
+}
+
+/* ============================================================
+   REPORTE CLÍNICO AUTOMÁTICO — SciPy ECG Analysis
+   ============================================================ */
+
+.reporte-clinico {
+    background: #161b22;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3), 0 2px 4px -1px rgba(0,0,0,0.2);
+    margin-bottom: 25px;
+    overflow: hidden;
+    border: 1px solid #30363d;
+}
+
+/* ── Cabecera ── */
+.reporte-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 60%, #4a5568 100%);
+    color: white;
+    flex-wrap: wrap;
+}
+.reporte-titulo {
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    flex: 1;
+}
+.reporte-badge-ia {
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: white;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 2px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+.reporte-hint {
+    font-size: 0.70rem;
+    color: rgba(255,255,255,0.40);
+}
+
+/* ── Cuerpo ── */
+.reporte-cuerpo { padding: 16px 20px; }
+
+/* ── Estados (placeholder / cargando / error) ── */
+.reporte-estado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 56px;
+    color: #8b949e;
+    font-size: 0.85rem;
+    text-align: center;
+}
+.reporte-err { color: #e53e3e; }
+
+.spinner-sm {
+    width: 20px; height: 20px;
+    border: 3px solid #30363d;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+/* ── Grid de métricas (4 columnas) ── */
+.reporte-metricas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.metrica-card {
+    background: #1a1f2b;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 14px 10px 12px;
+    text-align: center;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.metrica-card:hover {
+    border-color: #8b949e;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* Valor numérico principal */
+.metrica-valor {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #e6edf3;
+    line-height: 1;
+    font-family: 'Courier New', monospace;
+    transition: color 0.3s;
+}
+.metrica-sec { font-size: 1.55rem; color: #8b949e; }
+
+.metrica-label {
+    font-size: 0.70rem;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 7px;
+    line-height: 1.45;
+}
+.metrica-label small { font-size: 0.62rem; }
+
+/* Color del HR según categoría */
+.mcard-fc-normal  .metrica-valor { color: #16a34a; }
+.mcard-fc-alerta  .metrica-valor { color: #d97706; }
+.mcard-fc-critico .metrica-valor { color: #dc2626; }
+.mcard-fc-normal  { border-color: rgba(74,222,128,0.4); background: rgba(74,222,128,0.08); }
+.mcard-fc-alerta  { border-color: rgba(253,224,71,0.4); background: rgba(253,224,71,0.08); }
+.mcard-fc-critico { border-color: rgba(252,165,165,0.4); background: rgba(252,165,165,0.08); }
+
+/* Badge de ritmo */
+.metrica-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    margin: 6px 0 2px;
+    transition: all 0.25s;
+}
+.ritmo-regular       { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.35); }
+.ritmo-irregular     { background: rgba(252,165,165,0.12); color: #fc8181; border: 1px solid rgba(252,165,165,0.35); }
+.ritmo-indeterminado { background: #1a1f2b; color: #8b949e; border: 1px solid #30363d; }
+
+/* ── Interpretación clínica ── */
+.reporte-interp {
+    border-left: 4px solid #8b949e;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    color: #e6edf3;
+    margin-bottom: 12px;
+    background: #1a1f2b;
+    transition: background 0.3s, border-color 0.3s;
+}
+.interp-normal  { border-left-color: #16a34a; background: rgba(74,222,128,0.08); color: #4ade80; }
+.interp-alerta  { border-left-color: #d97706; background: rgba(253,224,71,0.08); color: #fcd34d; }
+.interp-critico { border-left-color: #dc2626; background: rgba(252,165,165,0.08); color: #fc8181; }
+.interp-error   { border-left-color: #8b949e; background: #1a1f2b; color: #8b949e; font-style: italic; }
+
+/* ── Fila de tags meta ── */
+.reporte-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.reporte-tag {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: #30363d;
+    color: #8b949e;
+}
+.tag-alta    { background: rgba(74,222,128,0.12); color: #4ade80; }
+.tag-media   { background: rgba(252,211,77,0.12); color: #fcd34d; }
+.tag-baja    { background: rgba(252,165,165,0.12); color: #fc8181; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .reporte-metricas { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+    .reporte-cuerpo   { padding: 12px; }
+    .reporte-metricas { gap: 8px; }
+    .metrica-valor    { font-size: 1.6rem; }
+    .metrica-sec      { font-size: 1.3rem; }
 }
 
 /* ============================================================
@@ -1006,7 +1208,7 @@ canvas {
 }
 
 .modal-zoom-contenedor {
-    background: white;
+    background: #161b22;
     border-radius: 14px;
     width: 92vw;
     max-width: 1280px;
@@ -1162,10 +1364,10 @@ canvas {
 /* Footer del modal */
 .modal-zoom-footer {
     padding: 5px 16px;
-    background: #f7fafc;
-    border-top: 1px solid #e2e8f0;
+    background: #1a1f2b;
+    border-top: 1px solid #30363d;
     font-size: 0.75rem;
-    color: #718096;
+    color: #8b949e;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1225,9 +1427,9 @@ canvas {
     flex-direction: column;
     width: 360px;
     height: 490px;
-    background: white;
+    background: #161b22;
     border-radius: 18px;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 50px rgba(0,0,0,0.4);
     overflow: hidden;
     animation: chatSlideUp 0.25s cubic-bezier(.22,.68,0,1.2);
 }
@@ -1282,12 +1484,12 @@ canvas {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background: #f8fafc;
+    background: #1a1f2b;
     min-height: 0;
 }
 .chat-mensajes::-webkit-scrollbar { width: 5px; }
 .chat-mensajes::-webkit-scrollbar-track { background: transparent; }
-.chat-mensajes::-webkit-scrollbar-thumb { background: #cbd5e0; border-radius: 10px; }
+.chat-mensajes::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
 
 /* ---- Burbujas ---- */
 .chat-burbuja {
@@ -1311,11 +1513,11 @@ canvas {
     border-bottom-right-radius: 4px;
 }
 .chat-burbuja-bot {
-    background: white;
-    color: #1a202c;
+    background: #161b22;
+    color: #e6edf3;
     align-self: flex-start;
     border-bottom-left-radius: 4px;
-    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    box-shadow: 0 1px 6px rgba(0,0,0,0.2);
     border-left: 3px solid #2563eb;
 }
 
@@ -1325,13 +1527,13 @@ canvas {
     gap: 5px;
     padding: 8px 16px 8px;
     align-items: center;
-    background: #f8fafc;
+    background: #1a1f2b;
     flex-shrink: 0;
 }
 .typing-dot {
     width: 7px;
     height: 7px;
-    background: #94a3b8;
+    background: #8b949e;
     border-radius: 50%;
     animation: typingBounce 1.2s infinite ease-in-out;
 }
@@ -1347,26 +1549,26 @@ canvas {
     display: flex;
     gap: 8px;
     padding: 10px 12px;
-    border-top: 1px solid #e2e8f0;
-    background: white;
+    border-top: 1px solid #30363d;
+    background: #161b22;
     flex-shrink: 0;
 }
 .chat-input {
     flex: 1;
-    border: 1.5px solid #e2e8f0;
+    border: 1.5px solid #30363d;
     border-radius: 22px;
     padding: 8px 15px;
     font-size: 0.845rem;
     outline: none;
     transition: border-color 0.18s;
-    background: #f8fafc;
-    color: #1a202c;
+    background: #1a1f2b;
+    color: #e6edf3;
 }
 .chat-input:focus {
     border-color: #2563eb;
-    background: white;
+    background: #1a1f2b;
 }
-.chat-input::placeholder { color: #a0aec0; }
+.chat-input::placeholder { color: #8b949e; }
 .chat-enviar-btn {
     background: #2563eb;
     color: white;
@@ -1387,6 +1589,6 @@ canvas {
     transform: scale(1.08);
 }
 .chat-enviar-btn:disabled {
-    background: #cbd5e0;
+    background: #30363d;
     cursor: not-allowed;
 }

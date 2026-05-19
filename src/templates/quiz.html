@@ -33,6 +33,9 @@
                 &#128274; Guardar progreso
             </a>
             {% endif %}
+            <a href="/ayuda" class="btn-perfil-quiz" title="Ayuda y acerca de">
+                &#10067; Ayuda
+            </a>
         </div>
     </header>
 
@@ -91,6 +94,7 @@
                 <div class="quiz-monitor-grid" id="quiz-monitor-grid">
                     <!-- Los 12 canales se generan por JavaScript -->
                 </div>
+                <p class="hint-zoom-quiz">&#128269; Haz clic en cualquier derivaci&oacute;n para abrir la cuadr&iacute;cula de precisi&oacute;n interactiva</p>
             </div>
 
             <!-- 3. SECCIÓN DE PREGUNTAS -->
@@ -107,6 +111,35 @@
                 </button>
             </div>
 
+        </div>
+    </div>
+
+    <!-- ====================================================
+         MODAL: CUADRÍCULA DE PRECISIÓN INTERACTIVA
+         ==================================================== -->
+    <div id="modal-zoom" class="modal-zoom-overlay" style="display:none">
+        <div class="modal-zoom-contenedor">
+            <div class="modal-zoom-header">
+                <div class="modal-zoom-titulo">
+                    <span id="modal-zoom-label">Derivaci&oacute;n</span>
+                    <span class="escala-badge">25 mm/s &middot; 10 mm/mV</span>
+                </div>
+                <div class="modal-zoom-controles">
+                    <span id="info-cursor" class="info-cursor">Mueve el cursor sobre la gr&aacute;fica</span>
+                    <span id="info-medicion" class="info-medicion"></span>
+                    <button id="btn-zoom-menos" class="btn-zoom" title="Alejar (-)">&#8722;</button>
+                    <span id="zoom-nivel" class="zoom-nivel">1&times;</span>
+                    <button id="btn-zoom-mas" class="btn-zoom" title="Acercar (+)">&#43;</button>
+                    <button id="btn-reset-zoom" class="btn-zoom-reset" title="Restablecer vista">&#8635; Reset</button>
+                    <button id="btn-medir" class="btn-medir" title="Herramienta de medici&oacute;n (M)">Medir</button>
+                    <button id="btn-cerrar-modal" class="btn-cerrar" title="Cerrar (Esc)">&#10005;</button>
+                </div>
+            </div>
+            <canvas id="canvas-zoom" class="canvas-zoom"></canvas>
+            <div class="modal-zoom-footer">
+                <span>Scroll: zoom &nbsp;|&nbsp; Arrastrar: desplazar &nbsp;|&nbsp; Teclas: +/- &nbsp; flechas &nbsp; M=medir &nbsp; Esc=cerrar</span>
+                <span id="modo-medicion-label">MODO MEDICI&Oacute;N &mdash; haz clic en 2 puntos de la curva</span>
+            </div>
         </div>
     </div>
 

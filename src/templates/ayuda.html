@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda &mdash; Yuluka-EKG</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ayuda.css') }}">
+</head>
+<body>
+
+    <!-- CABECERA -->
+    <header class="ayuda-header">
+        <img src="/img/Unimagdalena.png" alt="Universidad del Magdalena" class="ayuda-logo">
+        <div class="ayuda-header-centro">
+            <a href="/" class="btn-volver">&#8592; Monitor Principal</a>
+            <div class="ayuda-header-titulo">
+                <div class="ayuda-titulo-principal">Yuluka-EKG &mdash; Ayuda</div>
+                <div class="ayuda-subtitulo">Diplomado en Cuidado Cr&iacute;tico &mdash; Universidad del Magdalena</div>
+            </div>
+        </div>
+    </header>
+
+    <div class="ayuda-layout">
+
+        <!-- BARRA LATERAL -->
+        <nav class="ayuda-nav">
+            <div class="nav-grupo">
+                <div class="nav-grupo-titulo">Gu&iacute;a de Uso</div>
+                <a href="#inicio-rapido"   class="nav-item activo">&#9889; Inicio R&aacute;pido</a>
+                <a href="#monitor"         class="nav-item">&#128251; Monitor Cl&iacute;nico</a>
+                <a href="#dsp"             class="nav-item nav-sub">&#8627; Filtros DSP</a>
+                <a href="#zoom"            class="nav-item nav-sub">&#8627; Zoom de Derivaci&oacute;n</a>
+                <a href="#reporte"         class="nav-item nav-sub">&#8627; Reporte Autom&aacute;tico</a>
+                <a href="#examen"          class="nav-item">&#9874; Examen Cl&iacute;nico</a>
+                <a href="#bot"             class="nav-item">&#129302; Monitor-Bot</a>
+                <a href="#progreso"        class="nav-item">&#128200; Mi Progreso</a>
+            </div>
+            <div class="nav-grupo">
+                <div class="nav-grupo-titulo">El Proyecto</div>
+                <a href="#acerca"          class="nav-item">&#128218; Acerca de</a>
+                <a href="#desarrolladores" class="nav-item">&#128187; Desarrolladores</a>
+                <a href="#contacto"        class="nav-item">&#9993; Contacto</a>
+            </div>
+        </nav>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="ayuda-contenido">
+
+            <!-- ── INICIO RÁPIDO ── -->
+            <section id="inicio-rapido" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#9889;</span>
+                    <div>
+                        <h2>Inicio R&aacute;pido</h2>
+                        <p class="seccion-bajada">Todo lo que necesitas para empezar en 3 pasos.</p>
+                    </div>
+                </div>
+
+                <div class="pasos-rapidos">
+                    <div class="paso">
+                        <div class="paso-num">1</div>
+                        <div class="paso-cuerpo">
+                            <strong>Selecciona un paciente</strong>
+                            <p>En el panel izquierdo elige un paciente del men&uacute; desplegable o pulsa <em>Paciente Aleatorio</em> para cargar un caso sorpresa del banco PTB-XL.</p>
+                        </div>
+                    </div>
+                    <div class="paso">
+                        <div class="paso-num">2</div>
+                        <div class="paso-cuerpo">
+                            <strong>Pulsa &ldquo;Cargar Monitor&rdquo;</strong>
+                            <p>El monitor muestra las 12 derivaciones est&aacute;ndar, la ficha cl&iacute;nica del paciente y genera autom&aacute;ticamente el reporte de frecuencia card&iacute;aca y ritmo.</p>
+                        </div>
+                    </div>
+                    <div class="paso">
+                        <div class="paso-num">3</div>
+                        <div class="paso-cuerpo">
+                            <strong>Explora, analiza y consulta</strong>
+                            <p>Haz clic en cualquier derivaci&oacute;n para ampliarla, ajusta los filtros de se&ntilde;al y usa el chat con <strong>Monitor-Bot</strong> para recibir gu&iacute;a cl&iacute;nica en tiempo real.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <span class="tip-icono">&#128161;</span>
+                    <div>
+                        <strong>Consejo:</strong> Para practicar diagn&oacute;stico, ve al
+                        <a href="/quiz">Examen Cl&iacute;nico</a> donde los casos se presentan sin revelar el diagn&oacute;stico hasta que respondas.
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── MONITOR CLÍNICO ── -->
+            <section id="monitor" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#128251;</span>
+                    <div>
+                        <h2>Monitor Cl&iacute;nico</h2>
+                        <p class="seccion-bajada">La pantalla principal de an&aacute;lisis de ECG con 12 derivaciones.</p>
+                    </div>
+                </div>
+
+                <div class="tabla-funcs">
+                    <div class="tf-fila tf-encabezado">
+                        <span>Elemento</span><span>Funci&oacute;n</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Men&uacute; de paciente</span>
+                        <span>Elige entre los casos curados del banco PTB-XL (validados por cardi&oacute;logo) o solicita un caso aleatorio del pool calificado.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Bot&oacute;n &ldquo;Cargar Monitor&rdquo;</span>
+                        <span>Descarga la se&ntilde;al ECG cruda desde PTB-XL (500 Hz, 10 segundos) y la renderiza en los 12 canales.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Panel de derivaciones</span>
+                        <span>Muestra las 12 derivaciones est&aacute;ndar (DI, DII, DIII, aVR, aVL, aVF, V1&ndash;V6) con cuadr&iacute;cula de papel milimetrado.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Ficha cl&iacute;nica</span>
+                        <span>Muestra edad, sexo, peso, talla, IMC, diagn&oacute;stico validado por cardi&oacute;logo con porcentaje de confianza e informe cl&iacute;nico completo.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Mapa de caras mioc&aacute;rdicas</span>
+                        <span>Resalta visualmente los territorios coronarios afectados seg&uacute;n el c&oacute;digo SCP del diagn&oacute;stico (anterior, septal, inferior, lateral, aVR).</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── FILTROS DSP ── -->
+            <section id="dsp" class="ayuda-seccion ayuda-sub">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#127925;</span>
+                    <div>
+                        <h2>Filtros DSP</h2>
+                        <p class="seccion-bajada">Procesamiento digital de se&ntilde;al aplicado sobre la se&ntilde;al ECG.</p>
+                    </div>
+                </div>
+
+                <div class="tabla-funcs">
+                    <div class="tf-fila tf-encabezado">
+                        <span>Modo de se&ntilde;al</span><span>Descripci&oacute;n t&eacute;cnica</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Se&ntilde;al Cruda</span>
+                        <span>Se&ntilde;al original del banco PTB-XL sin ning&uacute;n procesamiento. Puede contener artefactos de l&iacute;nea de base y ruido de alta frecuencia.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Filtro Pasa-Banda</span>
+                        <span>Filtro Butterworth de 4&ordm; orden (0.5&ndash;40 Hz). Elimina deriva de l&iacute;nea de base (&lt;0.5 Hz) y ruido muscular de alta frecuencia (&gt;40 Hz).</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Pasa-Banda + Notch 60 Hz</span>
+                        <span>A&ntilde;ade un filtro IIR Notch a 60 Hz sobre el pasa-banda para eliminar la interferencia de la red el&eacute;ctrica (ruido de CA).</span>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <span class="tip-icono">&#128203;</span>
+                    <div>Para el <strong>Reporte Autom&aacute;tico</strong> siempre se usa el filtro Pasa-Banda internamente, independientemente de la opci&oacute;n visual seleccionada.</div>
+                </div>
+            </section>
+
+            <!-- ── ZOOM ── -->
+            <section id="zoom" class="ayuda-seccion ayuda-sub">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#128269;</span>
+                    <div>
+                        <h2>Zoom de Derivaci&oacute;n</h2>
+                        <p class="seccion-bajada">An&aacute;lisis de precisi&oacute;n sobre cualquier derivaci&oacute;n individual.</p>
+                    </div>
+                </div>
+
+                <p>Haz <strong>clic en cualquier derivaci&oacute;n</strong> del monitor para abrirla en modo zoom con cuadr&iacute;cula de papel de precisi&oacute;n (1 mm = 0.04 s / 0.1 mV).</p>
+
+                <div class="tabla-funcs" style="margin-top:1rem">
+                    <div class="tf-fila tf-encabezado">
+                        <span>Control</span><span>Acci&oacute;n</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Rueda del rat&oacute;n / Pellizco</span>
+                        <span>Zoom in / Zoom out sobre la se&ntilde;al.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Arrastrar</span>
+                        <span>Desplazamiento horizontal (panning) para recorrer los 10 segundos de registro.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Bot&oacute;n &ldquo;Medir&rdquo;</span>
+                        <span>Activa el modo de medici&oacute;n. Haz clic en dos puntos de la se&ntilde;al y ver&aacute;s la distancia en mm, segundos y mV en tiempo real.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Tecla Escape</span>
+                        <span>Cierra el modal de zoom.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── REPORTE AUTOMÁTICO ── -->
+            <section id="reporte" class="ayuda-seccion ayuda-sub">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#128202;</span>
+                    <div>
+                        <h2>Reporte Cl&iacute;nico Autom&aacute;tico</h2>
+                        <p class="seccion-bajada">An&aacute;lisis computacional de la se&ntilde;al generado con SciPy.</p>
+                    </div>
+                </div>
+
+                <p>Al cargar un paciente, el sistema analiza autom&aacute;ticamente la mejor derivaci&oacute;n disponible (preferencia: DII &rarr; V5 &rarr; V1 &rarr; DI) sobre los 10 segundos completos de registro.</p>
+
+                <div class="tabla-funcs" style="margin-top:1rem">
+                    <div class="tf-fila tf-encabezado">
+                        <span>M&eacute;trica</span><span>C&oacute;mo se calcula</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Frecuencia Card&iacute;aca</span>
+                        <span>Detecci&oacute;n de picos R con <code>scipy.signal.find_peaks</code>. FC = 60&thinsp;000 / RR<sub>promedio</sub> (ms).</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Ritmo</span>
+                        <span>Regular si SDNN &le; 50 ms y CV &le; 12%. Irregular si se supera alguno de los dos umbrales.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">RR Promedio</span>
+                        <span>Media de los intervalos entre picos R, expresada en milisegundos.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">SDNN</span>
+                        <span>Desviaci&oacute;n est&aacute;ndar de los intervalos RR (variabilidad). &gt; 50 ms sugiere irregularidad.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Confianza</span>
+                        <span><em>Alta</em>: &ge; 6 latidos detectados con amplitud consistente. <em>Media</em>: 3&ndash;5 latidos. <em>Baja</em>: &lt; 3 latidos o se&ntilde;al de baja calidad.</span>
+                    </div>
+                </div>
+
+                <div class="alerta-box">
+                    <span>&#9888;&#65039;</span>
+                    <div>El reporte es una herramienta <strong>educativa y de apoyo</strong>. No reemplaza el criterio cl&iacute;nico de un profesional de la salud.</div>
+                </div>
+            </section>
+
+            <!-- ── EXAMEN CLÍNICO ── -->
+            <section id="examen" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#9874;</span>
+                    <div>
+                        <h2>Examen Cl&iacute;nico</h2>
+                        <p class="seccion-bajada">Modo de evaluaci&oacute;n diagn&oacute;stica con retroalimentaci&oacute;n inmediata.</p>
+                    </div>
+                </div>
+
+                <p>Accede desde el bot&oacute;n <strong>Examen Cl&iacute;nico</strong> en el encabezado. Cada caso presenta el ECG completo de 12 derivaciones sin revelar el diagn&oacute;stico.</p>
+
+                <div class="tabla-funcs" style="margin-top:1rem">
+                    <div class="tf-fila tf-encabezado">
+                        <span>Elemento</span><span>Descripci&oacute;n</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Casos predefinidos</span>
+                        <span>Casos cl&aacute;sicos de las categor&iacute;as Arritmias, Isquemia y Trastornos de Conducci&oacute;n, construidos con se&ntilde;ales reales de PTB-XL.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Opciones de respuesta</span>
+                        <span>Cuatro opciones de diagn&oacute;stico. Solo una es correcta. Selecciona y pulsa <em>Confirmar</em>.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Retroalimentaci&oacute;n</span>
+                        <span>Al confirmar, se muestra si acertaste o fallaste junto con una explicaci&oacute;n cl&iacute;nica detallada del caso.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Zoom en derivaciones</span>
+                        <span>Igual que en el monitor principal: haz clic en cualquier derivaci&oacute;n durante el examen para examinarla en detalle.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Guardado autom&aacute;tico</span>
+                        <span>Si tienes sesi&oacute;n iniciada, cada respuesta se guarda autom&aacute;ticamente en tu historial de <em>Mi Progreso</em>.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── MONITOR-BOT ── -->
+            <section id="bot" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#129302;</span>
+                    <div>
+                        <h2>Monitor-Bot</h2>
+                        <p class="seccion-bajada">Asistente de IA integrado al contexto del paciente que est&aacute;s viendo.</p>
+                    </div>
+                </div>
+
+                <p>Monitor-Bot es un instructor de IA que conoce exactamente qu&eacute; paciente tienes cargado, su diagn&oacute;stico validado por cardi&oacute;logo y lo que deber&iacute;a mostrar cada derivaci&oacute;n. Tambi&eacute;n tiene acceso a las gu&iacute;as cl&iacute;nicas del diplomado.</p>
+
+                <p>Ab&iacute;relo con el bot&oacute;n flotante <strong>&ldquo;Monitor-Bot&rdquo;</strong> en la esquina inferior derecha del monitor.</p>
+
+                <div class="tabla-funcs" style="margin-top:1rem">
+                    <div class="tf-fila tf-encabezado">
+                        <span>Modo</span><span>C&oacute;mo activarlo</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Modo Explicaci&oacute;n</span>
+                        <span>Pregunta por una derivaci&oacute;n espec&iacute;fica: <em>&ldquo;Explica V2&rdquo;</em>, <em>&ldquo;Qu&eacute; muestra DII en este paciente&rdquo;</em>. El bot describe morfolog&iacute;a de ondas, amplitud y significado cl&iacute;nico.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Modo Socr&aacute;tico</span>
+                        <span>Pregunta por el diagn&oacute;stico: <em>&ldquo;Qu&eacute; tiene este paciente?&rdquo;</em>. El bot NO te lo dice directamente — te gu&iacute;a con preguntas hacia los hallazgos clave.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Modo Confirmaci&oacute;n</span>
+                        <span>Si propones el diagn&oacute;stico correcto, el bot lo confirma y explica la fisiopatolog&iacute;a completa.</span>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <span class="tip-icono">&#128273;</span>
+                    <div>Requiere que la variable de entorno <code>GEMINI_API_KEY</code> est&eacute; configurada en el servidor. Contacta al administrador si el chat no responde.</div>
+                </div>
+            </section>
+
+            <!-- ── MI PROGRESO ── -->
+            <section id="progreso" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#128200;</span>
+                    <div>
+                        <h2>Mi Progreso</h2>
+                        <p class="seccion-bajada">Seguimiento personal de tu desempe&ntilde;o en el diplomado.</p>
+                    </div>
+                </div>
+
+                <p>Accede desde el bot&oacute;n con tu nombre en el encabezado (requiere sesi&oacute;n iniciada). Muestra tu historial completo de casos respondidos.</p>
+
+                <div class="tabla-funcs" style="margin-top:1rem">
+                    <div class="tf-fila tf-encabezado">
+                        <span>Secci&oacute;n</span><span>Contenido</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Radar de categor&iacute;as</span>
+                        <span>Gr&aacute;fico de radar con tu porcentaje de aciertos en Arritmias, Isquemia y Trastornos de Conducci&oacute;n.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Estad&iacute;sticas globales</span>
+                        <span>Total de casos respondidos, n&uacute;mero de aciertos y promedio general de precisi&oacute;n.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Historial de casos</span>
+                        <span>Lista cronol&oacute;gica de cada caso respondido con fecha, tu respuesta, si fue correcta o no, y el diagn&oacute;stico real.</span>
+                    </div>
+                    <div class="tf-fila">
+                        <span class="tf-elem">Reiniciar progreso</span>
+                        <span>Borra todo tu historial y estad&iacute;sticas para empezar de cero. La acci&oacute;n es irreversible.</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── ACERCA DE ── -->
+            <section id="acerca" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#128218;</span>
+                    <div>
+                        <h2>Acerca del Proyecto</h2>
+                        <p class="seccion-bajada">Yuluka-EKG &mdash; Una plataforma educativa hecha por estudiantes, para estudiantes.</p>
+                    </div>
+                </div>
+
+                <div class="acerca-texto">
+                    <p>
+                        <strong>Yuluka-EKG</strong> es una plataforma web de an&aacute;lisis e interpretaci&oacute;n de electrocardiogramas desarrollada
+                        por estudiantes de Ingenier&iacute;a Electr&oacute;nica de la <strong>Universidad del Magdalena</strong> como proyecto
+                        de la asignatura <strong>Bioingenier&iacute;a 2</strong>.
+                    </p>
+                    <p>
+                        La plataforma integra datos reales del banco internacional <strong>PTB-XL</strong> (PhysioNet &mdash; 21 837 registros
+                        de ECG validados por cardi&oacute;logos), procesamiento digital de se&ntilde;al con <strong>SciPy</strong>,
+                        visualizaci&oacute;n interactiva con <strong>Chart.js</strong> y un asistente de inteligencia artificial
+                        basado en <strong>Gemini 2.5 Flash</strong> para guiar al estudiante durante el an&aacute;lisis cl&iacute;nico.
+                    </p>
+                    <p>
+                        El nombre <em>Yuluka</em> rinde homenaje al pueblo ind&iacute;gena Yuluka (Wayuu) del Caribe colombiano,
+                        una forma de dar identidad local a una herramienta construida con or&iacute;gen y prop&oacute;sito regional.
+                    </p>
+                </div>
+
+                <div class="tecnologias">
+                    <div class="tech-badge">Python 3 · Flask</div>
+                    <div class="tech-badge">SciPy · NumPy</div>
+                    <div class="tech-badge">PTB-XL · WFDB</div>
+                    <div class="tech-badge">Chart.js</div>
+                    <div class="tech-badge">Gemini 2.5 Flash</div>
+                    <div class="tech-badge">SQLite · SQLAlchemy</div>
+                    <div class="tech-badge">pdfplumber</div>
+                </div>
+            </section>
+
+            <!-- ── DESARROLLADORES ── -->
+            <section id="desarrolladores" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#128187;</span>
+                    <div>
+                        <h2>Desarrolladores</h2>
+                        <p class="seccion-bajada">Estudiantes de Ingenier&iacute;a Electr&oacute;nica &mdash; Universidad del Magdalena</p>
+                    </div>
+                </div>
+
+                <div class="devs-grid">
+                    <div class="dev-card">
+                        <div class="dev-avatar">JC</div>
+                        <div class="dev-info">
+                            <div class="dev-nombre">Juan Carlos Orozco Pulido</div>
+                            <div class="dev-rol">Co-desarrollador &mdash; Proyecto completo</div>
+                            <div class="dev-uni">Ingenier&iacute;a Electr&oacute;nica &middot; Universidad del Magdalena</div>
+                            <a href="mailto:jcorozcop@unimagdalena.edu.co" class="dev-correo">
+                                &#9993; jcorozcop@unimagdalena.edu.co
+                            </a>
+                            <a href="https://github.com/JuanKoP-10" target="_blank" rel="noopener" class="dev-correo dev-github">
+                                &#128571; github.com/JuanKoP-10
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="dev-card">
+                        <div class="dev-avatar">EJ</div>
+                        <div class="dev-info">
+                            <div class="dev-nombre">Elimelec Jos&eacute; Ricardo Melo</div>
+                            <div class="dev-rol">Co-desarrollador &mdash; Proyecto completo</div>
+                            <div class="dev-uni">Ingenier&iacute;a Electr&oacute;nica &middot; Universidad del Magdalena</div>
+                            <a href="mailto:ericardo@unimagdalena.edu.co" class="dev-correo">
+                                &#9993; ericardo@unimagdalena.edu.co
+                            </a>
+                            <a href="https://github.com/Elimelec07" target="_blank" rel="noopener" class="dev-correo dev-github">
+                                &#128571; github.com/Elimelec07
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="agradecimiento">
+                    <div class="agradecimiento-icono">&#128153;</div>
+                    <div class="agradecimiento-texto">
+                        <strong>Gracias por usar Yuluka-EKG.</strong>
+                        <p>
+                            Este proyecto naci&oacute; del esfuerzo de dos estudiantes que cre&iacute;an que la tecnolog&iacute;a pod&iacute;a
+                            hacer la ense&ntilde;anza cl&iacute;nica m&aacute;s accesible y efectiva. Esperamos que sea una herramienta
+                            valiosa en tu formaci&oacute;n como profesional de la salud.
+                        </p>
+                        <p>
+                            Construido con dedicaci&oacute;n desde Santa Marta, Colombia &mdash;
+                            <strong>Universidad del Magdalena, 2025</strong>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ── CONTACTO ── -->
+            <section id="contacto" class="ayuda-seccion">
+                <div class="seccion-encabezado">
+                    <span class="seccion-icono">&#9993;</span>
+                    <div>
+                        <h2>Contacto</h2>
+                        <p class="seccion-bajada">Reporta errores, sugiere mejoras o simplemente escr&iacute;benos.</p>
+                    </div>
+                </div>
+
+                <div class="contacto-grid">
+                    <div class="contacto-card">
+                        <div class="contacto-icono">&#128203;</div>
+                        <div class="contacto-titulo">Reportar un error</div>
+                        <div class="contacto-desc">¿Encontraste un bug o un comportamiento inesperado en la plataforma?</div>
+                        <a href="mailto:jcorozcop@unimagdalena.edu.co?subject=Yuluka-EKG%20Error" class="btn-contacto">
+                            Escribir a Juan Carlos
+                        </a>
+                    </div>
+                    <div class="contacto-card">
+                        <div class="contacto-icono">&#128161;</div>
+                        <div class="contacto-titulo">Sugerir una mejora</div>
+                        <div class="contacto-desc">¿Tienes una idea para hacer la plataforma m&aacute;s &uacute;til para el diplomado?</div>
+                        <a href="mailto:ericardo@unimagdalena.edu.co?subject=Yuluka-EKG%20Sugerencia" class="btn-contacto">
+                            Escribir a Elimelec
+                        </a>
+                    </div>
+                    <div class="contacto-card">
+                        <div class="contacto-icono">&#127979;</div>
+                        <div class="contacto-titulo">Consultas acad&eacute;micas</div>
+                        <div class="contacto-desc">Preguntas sobre el proyecto, integraci&oacute;n con el diplomado o colaboraci&oacute;n.</div>
+                        <a href="mailto:jcorozcop@unimagdalena.edu.co?cc=ericardo@unimagdalena.edu.co&subject=Yuluka-EKG%20Consulta" class="btn-contacto">
+                            Escribir a ambos
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        // Resaltado activo en la navegación lateral al hacer scroll
+        const items = document.querySelectorAll('.nav-item');
+        const secciones = document.querySelectorAll('.ayuda-seccion');
+
+        function actualizarNav() {
+            let actual = '';
+            secciones.forEach(sec => {
+                if (window.scrollY >= sec.offsetTop - 120) actual = sec.id;
+            });
+            items.forEach(a => {
+                a.classList.toggle('activo', a.getAttribute('href') === '#' + actual);
+            });
+        }
+
+        window.addEventListener('scroll', actualizarNav, { passive: true });
+
+        // Scroll suave a secciones
+        items.forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+
+</body>
+</html>

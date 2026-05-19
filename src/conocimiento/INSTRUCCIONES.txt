@@ -1,0 +1,23 @@
+CARPETA DE CONOCIMIENTO — MONITOR-BOT
+======================================
+
+Coloca aquí los PDFs de las guías clínicas que quieres que Monitor-Bot use
+como fuente de referencia al responder preguntas de los estudiantes.
+
+INSTRUCCIONES:
+- Solo se leen archivos .pdf
+- Se cargan AUTOMÁTICAMENTE al arrancar el servidor (python app.py)
+- Si agregas un PDF nuevo, reinicia el servidor para que lo tome
+- El texto se extrae de cada página del PDF — los PDFs escaneados como imagen
+  NO funcionan (el texto debe ser seleccionable en el lector de PDFs)
+
+RECOMENDACIONES:
+- Nombra los archivos de forma descriptiva:
+    guia_ecg_basico.pdf
+    interpretacion_arritmias.pdf
+    protocolo_sindrome_coronario_agudo.pdf
+- Se pueden agregar tantos PDFs como quieras; Gemini 2.5 Flash maneja
+  hasta ~1,000,000 tokens de contexto
+
+INSTALACIÓN REQUERIDA (una sola vez):
+    pip install pdfplumber
