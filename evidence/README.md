@@ -2,7 +2,7 @@
 ## Evidencias del Proyecto Yuluka‑EKG
 
 Este directorio consolida las **evidencias técnicas y resultados finales** del proyecto **Yuluka‑EKG**, como soporte a la fundamentación teórica y al documento de diseño técnico.  
-La información aquí presentada permite validar el correcto funcionamiento del pipeline de procesamiento y las decisiones adoptadas durante el desarrollo.
+La información aquí presentada permite validar el correcto funcionamiento de la plataforma.
 
 ---
 
@@ -11,8 +11,6 @@ La información aquí presentada permite validar el correcto funcionamiento del 
 El objetivo de esta sección es:
 
 - Documentar los **resultados obtenidos** durante el desarrollo del proyecto.
-- Proveer material de **soporte académico y técnico** para evaluaciones, presentaciones y demostraciones.
-- Facilitar la trazabilidad entre teoría, diseño y educacion.
 ---
 
 ## 2. Evidencias Disponibles
@@ -44,7 +42,7 @@ Evidencia del funcionamiento real de la plataforma Yuluka‑EKG mediante:
 📂 *Archivos asociados:*  
 - Video
 - Capturas de pantalla
-- Enlaces externos (cuando corresponda)
+
 
 ---
 
@@ -69,10 +67,8 @@ Las evidencias aquí presentadas permiten validar de forma práctica los concept
 
 - Las evidencias tienen un **propósito educativo y académico**.
 - Los resultados **no deben interpretarse como diagnóstico clínico**.
-- Este material respalda la correcta implementación del sistema conforme a su diseño técnico.
 
 ---
 
-📌 **Proyecto:** Yuluka‑ECG  
-📌 **Área:** Procesamiento de Bioseñales / Ingeniería Biomédica / Salud Digital  
-📌 **Autores:** Elimelec J. R. Melo y Juan C. O. Pulido 
+📌 **Proyecto:** Yuluka‑ECG   
+📌 **Autores:** Elimelec J. Ricardo M. y Juan C. Orozco P. 
