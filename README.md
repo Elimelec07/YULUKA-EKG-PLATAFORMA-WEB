@@ -17,7 +17,7 @@ Este repositorio constituye el portafolio técnico del proyecto Yuluka-EKG. Este
 *   **Tutor Inteligente (Monitor-Bot):** Asistente integrado con la API de Google Gemini 2.5 Flash que lee el contexto dinámico del paciente en pantalla y ofrece pistas visuales sin dar la respuesta directa.
 *   **Métricas y Metacognición:** Base de datos relacional (SQLite + Flask-Login) que registra el progreso del estudiante para identificar sus debilidades y sugerir temas de repaso.
 *   **Interfaz y Despliegue:** Dashboard responsivo de 12 derivaciones en papel milimetrado (Flask + Chart.js), optimizado para pruebas remotas en tiempo real a través de Ngrok.
-*   
+  
 ## Tecnologías
 * Backend: Python | Flask | Flask-Login | Flask-SQLAlchemy
 * Procesamiento de Señales (DSP) e IA: SciPy | WFDB (PhysioNet) | Google Gemini API
