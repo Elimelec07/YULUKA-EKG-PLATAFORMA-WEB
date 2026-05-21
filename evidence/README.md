@@ -1,4 +1,4 @@
-# 📊 Resultados y Sustentación
+# Resultados y Sustentación
 ## Evidencias del Proyecto Yuluka‑EKG
 
 Este directorio consolida las **evidencias técnicas y resultados finales** del proyecto **Yuluka‑EKG**, como soporte a la fundamentación teórica y al documento de diseño técnico.  
@@ -26,7 +26,7 @@ Material de presentación ejecutiva que resume:
 - Principales resultados
 - Impacto educativo del sistema
 
-📂 *Archivos asociados:*  
+*Archivos asociados:*  
 - Presentación (PDF / PPT)
 
 ---
@@ -39,7 +39,7 @@ Evidencia del funcionamiento real de la plataforma Yuluka‑EKG mediante:
 - Capturas del frontend web.
 - Enlaces a despliegue local o demostración en vivo (si aplica).
 
-📂 *Archivos asociados:*  
+*Archivos asociados:*  
 - Video
 - Capturas de pantalla
 
@@ -50,13 +50,13 @@ Evidencia del funcionamiento real de la plataforma Yuluka‑EKG mediante:
 
 Esta sección se complementa directamente con los siguientes documentos:
 
-- 📘 **Documento de Diseño Técnico:**  
+- **Documento de Diseño Técnico:**  
   `docs/diseno_tecnico.md`
 
-- 📄 **Reporte de Fundamentación Técnica (Resumen):**  
+- **Reporte de Fundamentación Técnica (Resumen):**  
   `docs/fundamentacion_resumen.md`
 
-- 📚 **Estado del Arte (Versión Extendida):**  
+- **Estado del Arte (Versión Extendida):**  
   `docs/estado_del_arte_completo.md`
 
 Las evidencias aquí presentadas permiten validar de forma práctica los conceptos y decisiones descritos en dichos documentos.
