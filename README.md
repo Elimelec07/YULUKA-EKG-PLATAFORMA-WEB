@@ -1,8 +1,7 @@
-# Yuluka-ECG: Devolviendo la Armonía a las Señales del Corazón
-Hola. Bienvenidos al portafolio Yuluka-EKG este nace de la necesidad de evolucionar la forma en que presentamos la ingeniería. En lugar de informes tradicionales, aquí encontrarás un ecosistema digital que documenta el desarrollo de nuestro proyecto.
+# Yuluka-EKG: Devolviendo la Armonía a las Señales del Corazón
 
 ## Descripción del Proyecto
-Este repositorio constituye el portafolio técnico del proyecto Yuluka-EKG. Este proyecto aborda el uso de una herramienta de apoyo para estudiantes del area de la salud interesados en aprender a analizar y diagnosticar señales EKG, esto se logra mediante un ecosistema web integral que procesa datos y señales reales provenientes de la base de datos clínica estandarizada **PTB-XL (PhysioNet)**, transformándolas en herramientas pedagógicas interactivas.
+¡Hola! Bienvenidos a Yuluka-EKG, un ecosistema digital interactivo que nace de la necesidad de evolucionar la forma tradicional de presentar la ingeniería, sustituyendo los informes estáticos por un entorno colaborativo vivo que documenta rigurosamente el desarrollo de nuestro proyecto. El nombre de nuestra plataforma rinde homenaje a la cosmogonía de las comunidades indígenas de la Sierra Nevada de Santa Marta, donde "Yuluka" significa entrar en armonía o hacer que el pensamiento y el corazón sientan en un mismo sentido. Inspirados en esta filosofía ancestral, hemos diseñado una plataforma web educativa dedicada al aprendizaje de la electrocardiografía (EKG), permitiendo a los usuarios visualizar, interactuar y comprender la morfología cardiaca a través de registros preexistentes de bases de datos estandarizadas. Yuluka-EKG es, por lo tanto, un puente pedagógico donde la tecnología y el latido del corazón se unen para transformar la enseñanza de la salud en una experiencia dinámica, intuitiva y en perfecta armonía.
 
 ## Estructura del Portafolio
 *   `docs/`: Reporte de fundamentación (Estado del arte), matriz de alternativas y diseño técnico.
