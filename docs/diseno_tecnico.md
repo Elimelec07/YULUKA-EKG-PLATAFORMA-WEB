@@ -1,4 +1,4 @@
-# 📐 Documento de Diseño Técnico
+# Documento de Diseño Técnico
 ## Plataforma Yuluka‑EKG
 
 ---
@@ -100,13 +100,13 @@ Este componente proporciona un entorno de asistencia integrado en el frontend pa
 
 | Componente | Tecnología Seleccionada | Justificación Técnica |
 |---|---|---|
-| ⚙️ **Backend & Enrutamiento** | `Python` + `Flask` | Entorno ligero y flexible, ideal para integración de librerías científicas y despliegue ágil. |
-| 📊 **Procesamiento DSP** | `NumPy` + `SciPy` | Estándar de la industria para filtrado digital, análisis e interpolación matemática. |
-| 🗄️ **Persistencia Relacional** | `SQLite` + `SQLAlchemy` | Base de datos serverless adecuada para persistencia local y gestión de sesiones. |
-| 🎨 **Frontend & UI** | `HTML5` + `CSS3` + `JavaScript (ES6)` | Desarrollo responsivo, moderno y compatible con navegadores web actuales. |
-| 📈 **Visualización de Señales** | `Chart.js` | Renderizado eficiente en Canvas para series temporales multicanal. |
-| 🌐 **Visualización 3D** | `Three.js (WebGL)` | Carga optimizada de modelos `GLTF/GLB` de bajo peso poligonal. |
-| 🧠 **Fuente de Datos** | `PTB-XL (PhysioNet)` | Base de datos clínica validada y procesada en formato JSON. |
+| **Backend & Enrutamiento** | `Python` + `Flask` | Entorno ligero y flexible, ideal para integración de librerías científicas y despliegue ágil. |
+| **Procesamiento DSP** | `NumPy` + `SciPy` | Estándar de la industria para filtrado digital, análisis e interpolación matemática. |
+| **Persistencia Relacional** | `SQLite` + `SQLAlchemy` | Base de datos serverless adecuada para persistencia local y gestión de sesiones. |
+| **Frontend & UI** | `HTML5` + `CSS3` + `JavaScript (ES6)` | Desarrollo responsivo, moderno y compatible con navegadores web actuales. |
+| **Visualización de Señales** | `Chart.js` | Renderizado eficiente en Canvas para series temporales multicanal. |
+| **Visualización 3D** | `Three.js (WebGL)` | Carga optimizada de modelos `GLTF/GLB` de bajo peso poligonal. |
+| **Fuente de Datos** | `PTB-XL (PhysioNet)` | Base de datos clínica validada y procesada en formato JSON. |
 
 ---
 
