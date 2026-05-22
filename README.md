@@ -3,7 +3,7 @@
 ## Descripción del Proyecto
 ¡Hola! Bienvenidos a Yuluka-EKG, un ecosistema digital interactivo que nace de la necesidad de evolucionar la forma tradicional de presentar la ingeniería, sustituyendo los informes estáticos por un entorno colaborativo vivo que documenta rigurosamente el desarrollo de nuestro proyecto. El nombre de nuestra plataforma rinde homenaje a la cosmogonía de las comunidades indígenas de la Sierra Nevada de Santa Marta, donde "Yuluka" significa entrar en armonía o hacer que el pensamiento y el corazón sientan en un mismo sentido. Inspirados en esta filosofía ancestral, hemos diseñado una plataforma web educativa dedicada al aprendizaje de la electrocardiografía (EKG), permitiendo a los usuarios visualizar, interactuar y comprender la morfología cardiaca a través de registros preexistentes de bases de datos estandarizadas. Yuluka-EKG es, por lo tanto, un puente pedagógico donde la tecnología y el latido del corazón se unen para transformar la enseñanza de la salud en una experiencia dinámica, intuitiva y en perfecta armonía.
 
-## 🗺️ Mapa de Navegación del Ecosistema (Estructura del Portafolio)
+## Mapa de Navegación del Ecosistema (Estructura del Portafolio)
 
 ¡Explorar este proyecto es muy fácil! Imagina que nuestra plataforma es un edificio en construcción; cada carpeta es un piso diferente con herramientas específicas para la enseñanza del EKG:
 
