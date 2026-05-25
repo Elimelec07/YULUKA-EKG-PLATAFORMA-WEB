@@ -44,7 +44,7 @@ El estudio respalda el desarrollo de una plataforma que integre visualización p
 - **Instrumento:** formulario estructurado con preguntas de selección única, selección múltiple, escala Likert (1–5) y preguntas abiertas.
 - **Población objetivo:** estudiantes y docentes de la Facultad de Ciencias de la Salud.
 - **Tamaño muestral:** 25 respuestas válidas.
-- **Fechas de recolección:** del 17 al 30 de noviembre de 2026 (según marcas temporales de las respuestas).
+- **Fechas de recolección:** del 7 al 20 de mayo de 2026.
 - **Análisis cuantitativo:** estadística descriptiva (frecuencias, medias, medianas, distribuciones).
 - **Análisis cualitativo:** revisión temática de las respuestas abiertas para identificar patrones recurrentes.
 
