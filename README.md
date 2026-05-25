@@ -12,7 +12,7 @@
 ├── README.md              <-- ¡Estás aquí! (La recepción del proyecto)
 │
 ├── 📂 docs/                  <-- El Cerebro Teórico
-│    ├── Encuesta realizada
+│    ├── Encuesta realizada (Apoyo personal de la salud en el diseño)
 │    ├── Reporte de Fundamentación (¿Por qué lo hacemos?)
 │    ├── Matriz de Alternativas (¿Cómo elegimos la mejor opción?)
 │    └── Documento de Diseño Técnico (Los planos del software)
