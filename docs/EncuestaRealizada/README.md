@@ -229,7 +229,7 @@ De las 25 respuestas, **20 contienen propuestas sustantivas** (las 5 restantes f
 
 > "Retroalimentación en la toma de decisiones según cada caso […] obtener una respuesta clínica en el simulador con base en esa decisión y obtener la retroalimentación inmediata." *(Docente, supervisión clínica)*
 
-**Lectura:** las respuestas abiertas refuerzan los hallazgos cuantitativos. La demanda más recurrente no es por un visualizador estático mejorado, sino por una herramienta que **explique, retroalimente y simule**. La conexión entre la señal eléctrica, la anatomía y la fisiopatología aparece como un eje vertebrador en al menos 9 de las 20 respuestas sustantivas.
+**Lectura:** las respuestas abiertas refuerzan los hallazgos cuantitativos. La demanda más recurrente no es por un visualizador estático mejorado, sino por una herramienta que **explique, retroalimente y simule**. La conexión entre la señal eléctrica, la anatomía y la fisiopatología aparece en al menos 9 de las 20 respuestas sustantivas.
 
 ---
 
