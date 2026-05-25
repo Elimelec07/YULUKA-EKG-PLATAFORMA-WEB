@@ -37,7 +37,7 @@ Evidencia del funcionamiento real de la plataforma Yuluka‑EKG mediante:
 
 - Video demostrativo del pipeline completo.
 - Capturas del frontend web.
-- Enlaces a despliegue local o demostración en vivo (si aplica).
+- Enlaces a despliegue local o demostración en vivo.
 
 *Archivos asociados:*  
 - Video
