@@ -303,7 +303,7 @@ De las 25 respuestas, 13 fueron negativas o vacías ("no", "ninguno", ".", etc.)
 - **Sesgo de programa.** 24 de 25 respuestas provienen de Enfermería. Las necesidades de otros programas (Medicina, Tecnología en Atención Prehospitalaria, etc.) podrían diferir.
 - **Sesgo de autoselección.** Quienes respondieron probablemente tienen mayor interés en el tema, lo que puede sobrerrepresentar las valoraciones positivas hacia funcionalidades digitales.
 - **Pregunta del modelo 3D incorporada tardíamente.** Su evaluación se basa en n = 16 (los 9 primeros estudiantes no respondieron). Las conclusiones sobre esta funcionalidad deben matizarse en consecuencia.
-- **No se midieron variables como uso previo de tecnología, nivel de competencia digital o experiencia clínica.** Estas podrían explicar parte de la varianza en las respuestas.
+
 
 ---
 
