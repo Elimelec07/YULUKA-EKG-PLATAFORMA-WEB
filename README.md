@@ -32,7 +32,7 @@
 
 * ### `docs/` | El Cerebro Teórico
     * Aquí guardamos los planos, las ideas y la ciencia detrás del proyecto.
-    * **¿Qué hay dentro?:** El **Reporte de Fundamentación** (el porqué de la plataforma), la **Matriz de Alternativas** (donde comparamos opciones para que todo sea óptimo) y el **Diseño Técnico** que muestra cómo se estructuró la web.
+    * **¿Qué hay dentro?:** El **Reporte de Fundamentación** (el porqué de la plataforma), la **Matriz de Alternativas** (donde comparamos opciones para que todo sea óptimo), el analisis completo de una **Encuesta Realizada** al personal de la salud sobre el diseño de la plataforma y el **Diseño Técnico** que muestra cómo se estructuró la plataforma web.
 
 * ### `src/` | El Laboratorio de Desarrollo
     * Es el motor de **Yuluka-EKG**. Aquí está toda la magia de la programación.
